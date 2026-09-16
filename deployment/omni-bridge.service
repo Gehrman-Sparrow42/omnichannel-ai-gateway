@@ -1,0 +1,21 @@
+[Unit]
+Description=Omnichannel Branch Assistant - Node.js WhatsApp Web Puppeteer Bridge
+After=network.target omni-backend.service
+Wants=omni-backend.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/omnichannel-branch-assistant/bridge
+EnvironmentFile=/opt/omnichannel-branch-assistant/.env
+Environment=NODE_ENV=production
+Environment=PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+ExecStart=/usr/bin/node index.js
+Restart=always
+RestartSec=10s
+LimitNOFILE=65535
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

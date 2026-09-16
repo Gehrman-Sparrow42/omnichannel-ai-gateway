@@ -1,0 +1,19 @@
+[Unit]
+Description=Omnichannel Branch Assistant - FastAPI Multi-Tenant Backend
+After=network.target redis.service
+Wants=redis.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/omnichannel-branch-assistant
+EnvironmentFile=/opt/omnichannel-branch-assistant/.env
+ExecStart=/opt/omnichannel-branch-assistant/.venv/bin/uvicorn backend.main:app --host 0.0.0.0 --port 8000 --workers 2
+Restart=always
+RestartSec=5s
+LimitNOFILE=65535
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,142 @@
+services:
+  # ---------------------------------------------------------------------
+  # 1. FastAPI Omnichannel Multi-Tenant Backend & Control Center
+  # ---------------------------------------------------------------------
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: omni_backend
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - HOST=0.0.0.0
+      - PORT=8000
+      - DATABASE_PATH=/app/backend/omnichannel_data.db
+      - REDIS_URL=redis://redis:6379/0
+      - REDIS_ENABLED=true
+      - BRIDGE_API_URL=http://bridge:3001
+      - LLM_PROVIDER=${LLM_PROVIDER:-openai}
+      - LLM_API_KEY=${LLM_API_KEY:-}
+      - LLM_MODEL=${LLM_MODEL:-gpt-4o-mini}
+      - META_WEBHOOK_VERIFY_TOKEN=${META_WEBHOOK_VERIFY_TOKEN:-omni_meta_secure_verify_token_2026}
+      - NTFY_SERVER_URL=${NTFY_SERVER_URL:-https://ntfy.sh}
+      - NTFY_GLOBAL_TOPIC=${NTFY_GLOBAL_TOPIC:-omni-camp-global-alerts}
+      - AGENT_NAME=${AGENT_NAME:-Navitas AI Asistanı}
+      - DEFAULT_BRANCH=${DEFAULT_BRANCH:-istanbul-airport}
+    volumes:
+      - backend_data:/app/backend
+    depends_on:
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - omni_network
+
+  # ---------------------------------------------------------------------
+  # 2. Redis 7 (Debounce sliding buffer, rate limiting, and session cache)
+  # ---------------------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: omni_redis
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - omni_network
+
+  # ---------------------------------------------------------------------
+  # 3. PostgreSQL 16 (Optional production database cluster)
+  # ---------------------------------------------------------------------
+  postgres:
+    profiles: ["postgres"]
+    image: postgres:16-alpine
+    container_name: omni_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-omni_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-omni_pass_secure_2026}
+      POSTGRES_DB: ${POSTGRES_DB:-omnichannel_db}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - omni_network
+
+  # ---------------------------------------------------------------------
+  # 4. WhatsApp Web Session Adapter (Node.js + Puppeteer)
+  # ---------------------------------------------------------------------
+  bridge:
+    build:
+      context: .
+      dockerfile: bridge/Dockerfile
+    container_name: omni_bridge
+    restart: unless-stopped
+    ports:
+      # Restrict bridge API to local host only for security
+      - "127.0.0.1:3001:3001"
+    environment:
+      - BACKEND_URL=http://backend:8000
+      - BRIDGE_API_PORT=3001
+      - DEFAULT_BRANCH=${DEFAULT_BRANCH:-istanbul-airport}
+      - AUTO_START_BRIDGE=false
+    volumes:
+      - bridge_auth:/app/bridge/.wwebjs_auth
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/status"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - omni_network
+
+volumes:
+  backend_data:
+  redis_data:
+  pg_data:
+  bridge_auth:
+
+networks:
+  omni_network:
+    driver: bridge
+
