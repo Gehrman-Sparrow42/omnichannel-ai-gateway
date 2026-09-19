@@ -80,6 +80,14 @@ function setupEventListeners() {
     });
   }
 
+  // KB Branch Switcher
+  const kbBranchSelect = document.getElementById("kbBranchSelect");
+  if (kbBranchSelect) {
+    kbBranchSelect.addEventListener("change", () => {
+      loadKnowledgeBase();
+    });
+  }
+
   // Conversation Search
   const searchInput = document.getElementById("convSearchInput");
   if (searchInput) {
@@ -327,13 +335,24 @@ async function loadBranches() {
       select.appendChild(allOpt);
     }
 
+    const kbSelect = document.getElementById("kbBranchSelect");
+    if (kbSelect) {
+      kbSelect.innerHTML = "";
+      const univOpt = document.createElement("option");
+      univOpt.value = "universal";
+      univOpt.textContent = "🌐 Evrensel Bilgi Bankası (Tüm Şubeler & Kurallar)";
+      kbSelect.appendChild(univOpt);
+    }
+
     allBranches.forEach((b) => {
+      if (b.id === "universal") return;
       const opt = document.createElement("option");
       opt.value = b.id;
-      opt.textContent = `🏕️ ${b.name} (${b.city})`;
+      opt.textContent = `📍 ${b.name} (${b.city})`;
 
       if (select) select.appendChild(opt.cloneNode(true));
-      if (simSelect) simSelect.appendChild(opt);
+      if (simSelect) simSelect.appendChild(opt.cloneNode(true));
+      if (kbSelect) kbSelect.appendChild(opt);
     });
 
     if (currentUser && currentUser.branch_id && select) {
@@ -343,9 +362,14 @@ async function loadBranches() {
       activeBranch = select.value;
     }
 
+    if (kbSelect) {
+      kbSelect.value = (activeBranch !== "all" && activeBranch) ? activeBranch : "universal";
+    }
+
     // Preselect in simulator
     if (simSelect) {
-      simSelect.value = activeBranch !== "all" ? activeBranch : (allBranches[0]?.id || "olympos");
+      const firstRealBranch = allBranches.find(b => b.id !== "universal")?.id || "istanbul-airport";
+      simSelect.value = (activeBranch !== "all" && activeBranch) ? activeBranch : firstRealBranch;
     }
   } catch (e) {
     console.error("Failed to load branches:", e);
@@ -791,7 +815,13 @@ async function toggleLead() {
 // =========================================================
 
 async function loadKnowledgeBase() {
-  const targetBranch = activeBranch === "all" ? (allBranches[0]?.id || "olympos") : activeBranch;
+  const kbSelect = document.getElementById("kbBranchSelect");
+  let targetBranch = (kbSelect && kbSelect.value) ? kbSelect.value : (activeBranch !== "all" && activeBranch ? activeBranch : "universal");
+  
+  if (kbSelect && targetBranch && kbSelect.value !== targetBranch) {
+    kbSelect.value = targetBranch;
+  }
+
   try {
     const res = await authFetch(`${API_BASE}/api/branches/${targetBranch}/knowledge`);
     if (!res.ok) return;
@@ -800,7 +830,13 @@ async function loadKnowledgeBase() {
     const titleElem = document.getElementById("kbBranchTitle");
     const editor = document.getElementById("kbSourceEditor");
 
-    if (titleElem) titleElem.textContent = `${data.branch_name} (${data.city}) — Bilgi Bankası`;
+    if (titleElem) {
+      if (targetBranch === "universal" || data.branch_id === "universal") {
+        titleElem.textContent = "🌐 Evrensel Bilgi Bankası (Tüm Şubeler & Kurallar)";
+      } else {
+        titleElem.textContent = `${data.branch_name} (${data.city}) — Bilgi Bankası`;
+      }
+    }
     if (editor) editor.value = data.content_markdown || "";
 
     updateKbLivePreview();
@@ -843,7 +879,8 @@ function insertKbSnippet(snippet) {
 }
 
 async function saveKnowledgeBase() {
-  const targetBranch = activeBranch === "all" ? (allBranches[0]?.id || "olympos") : activeBranch;
+  const kbSelect = document.getElementById("kbBranchSelect");
+  const targetBranch = (kbSelect && kbSelect.value) ? kbSelect.value : (activeBranch !== "all" && activeBranch ? activeBranch : "universal");
   const editor = document.getElementById("kbSourceEditor");
   const notice = document.getElementById("kbSaveNotice");
   if (!editor) return;

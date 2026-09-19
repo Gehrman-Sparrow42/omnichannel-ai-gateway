@@ -112,6 +112,8 @@ let connectedUser = null;
 let domSupervisorInterval = null;
 let isPairingInProgress = false;
 const recentLogs = [];
+// JID Registry: maps phone digits / raw IDs to their exact WhatsApp JIDs (@c.us or @lid)
+const jidRegistry = new Map();
 
 function addLog(type, title, detail) {
   const logItem = {
@@ -213,6 +215,7 @@ async function initializeWhatsAppClient(force = false, pairPhoneNumber = null) {
     currentPairingCode = null;
     console.log("[BRIDGE] Session authenticated successfully.");
     addLog("info", "Oturum Doğrulandı", "Kullanıcı verileri senkronize ediliyor...");
+    ensureDOMSupervisorStarted();
   });
 
   client.on("auth_failure", (msg) => {
@@ -241,7 +244,28 @@ async function initializeWhatsAppClient(force = false, pairPhoneNumber = null) {
     console.log(`[BRIDGE] WhatsApp Connected successfully as ${connectedUser?.phone}!`);
     addLog("success", "WhatsApp Bağlantısı Aktif", `WhatsApp oturumu bağlandı: ${connectedUser?.phone}`);
     ensureDOMSupervisorStarted();
+    populateJidRegistry();
   });
+
+  async function populateJidRegistry() {
+    try {
+      if (!client) return;
+      const chats = await client.getChats();
+      for (const c of chats) {
+        if (c.id && c.id._serialized) {
+          const jid = c.id._serialized;
+          const digits = jid.replace(/[^0-9]/g, "");
+          if (digits) {
+            jidRegistry.set(digits, jid);
+          }
+          jidRegistry.set(jid, jid);
+        }
+      }
+      console.log(`[WHATSAPP BRIDGE] Registered ${jidRegistry.size} active chat JIDs into registry.`);
+    } catch (e) {
+      console.warn("[WHATSAPP BRIDGE] Could not pre-populate JID registry:", e.message);
+    }
+  }
 
   async function handleIncomingMessage(msg) {
     // 1. Resolve chat identifier
@@ -256,7 +280,14 @@ async function initializeWhatsAppClient(force = false, pairPhoneNumber = null) {
     // 4. Ignore non-text media for now
     if (msg.hasMedia || msg.type !== "chat") return;
 
-    const senderPhone = chatId.replace("@c.us", "").replace(/[^0-9]/g, "");
+    // Save JID mapping so outbound replies know the exact JID (@c.us or @lid)
+    const cleanDigits = chatId.replace(/[^0-9]/g, "");
+    if (cleanDigits) {
+      jidRegistry.set(cleanDigits, chatId);
+      jidRegistry.set(chatId, chatId);
+    }
+
+    const senderPhone = cleanDigits || chatId.replace("@c.us", "");
     const rawBody = (msg.body || "").trim();
     if (!rawBody) return;
 
@@ -304,13 +335,14 @@ async function initializeWhatsAppClient(force = false, pairPhoneNumber = null) {
       contactName = contact.name || contact.pushname || senderPhone;
     } catch (e) {}
 
-    console.log(`[BRIDGE] Inbound message from ${senderPhone} (${contactName}): "${processedMessage.substring(0, 50)}..."`);
-    addLog("message", `Gelen Mesaj: ${senderPhone}`, processedMessage.substring(0, 80));
+    console.log(`[BRIDGE] Inbound message from ${chatId} (${contactName}): "${processedMessage.substring(0, 50)}..."`);
+    addLog("message", `Gelen Mesaj: ${contactName || senderPhone}`, processedMessage.substring(0, 80));
 
-    // Forward to FastAPI omnichannel backend
+    // Forward to FastAPI omnichannel backend (sending both phone and full chat_id)
     try {
       await axios.post(BACKEND_WEBHOOK_URL, {
         phone: senderPhone,
+        chat_id: chatId,
         message: processedMessage,
         contact_name: contactName,
         branch_id: DEFAULT_BRANCH,
@@ -367,8 +399,8 @@ function startDOMSupervisor() {
     try {
       const page = client.pupPage;
       const domStatus = await page.evaluate(async () => {
-        // 1. Check if logged in (main chat pane presence)
-        const mainPane = document.querySelector("#pane-side, [data-testid=chat-list], [aria-label=Chat\\ list]");
+        // 1. Check if logged in (main chat pane, chat list, or cells presence)
+        const mainPane = document.querySelector("#pane-side, [data-testid=chat-list], [aria-label=Chat\\ list], [aria-label=\"Sohbet listesi\"], [data-testid=cell-frame-container], [data-testid=chat-list-search]");
         if (mainPane) {
           return { state: "CONNECTED" };
         }
@@ -381,6 +413,19 @@ function startDOMSupervisor() {
             state: "PAIRING_CODE_READY",
             code: raw.includes("-") ? raw : `${raw.slice(0, 4)}-${raw.slice(4)}`,
           };
+        }
+
+        // Auto-dismiss feature modals/dialogs (e.g. "WhatsApp Web'deki yenilikler")
+        const promoBtn = Array.from(document.querySelectorAll('div[role="dialog"] button, [data-testid="popup-controls-ok"]')).find((b) => {
+          const t = b.innerText ? b.innerText.trim().toLowerCase() : "";
+          return t.includes("devam") || t.includes("tamam") || t.includes("ok") || t.includes("continue") || t.includes("anladım");
+        });
+        if (promoBtn) {
+          promoBtn.click();
+        }
+        const closeX = document.querySelector('div[role="dialog"] [data-icon="x"], div[role="dialog"] [data-testid="x-alt"]');
+        if (closeX) {
+          closeX.click();
         }
 
         // 3. Check for expired QR reload button
@@ -434,6 +479,7 @@ function startDOMSupervisor() {
             connectedUser = { name: "WhatsApp Yetkilisi", phone: "Aktif" };
           }
           addLog("success", "WhatsApp Bağlantısı Aktif", `WhatsApp oturumu bağlandı: ${connectedUser?.phone}`);
+          populateJidRegistry();
         }
       } else if (domStatus.state === "PAIRING_CODE_READY") {
         if (domStatus.code && domStatus.code !== currentPairingCode) {
@@ -781,16 +827,65 @@ app.post(["/send-message", "/api/send"], async (req, res) => {
     return res.status(400).json({ error: "chatId ve message zorunludur" });
   }
 
-  if (!client || bridgeState !== "CONNECTED") {
+  if (!client || (bridgeState !== "CONNECTED" && bridgeState !== "AUTHENTICATED")) {
     return res.status(503).json({ error: "WhatsApp istemcisi bağlı değil" });
   }
 
+  const clean = String(chatId).replace(/[^0-9]/g, "");
+  let targetChat = chatId;
+  if (jidRegistry.has(clean)) {
+    targetChat = jidRegistry.get(clean);
+  } else if (jidRegistry.has(chatId)) {
+    targetChat = jidRegistry.get(chatId);
+  } else if (!targetChat.includes("@")) {
+    // Standard phone numbers with country codes (like 905..., 49...) are @c.us
+    // Internal WhatsApp Linked IDs (LIDs) are typically 15+ digits (e.g. 229055504875721)
+    if (clean.length >= 14 && !clean.startsWith("90") && !clean.startsWith("49") && !clean.startsWith("1")) {
+      targetChat = `${clean}@lid`;
+    } else {
+      targetChat = `${clean}@c.us`;
+    }
+  }
+
+  console.log(`[WHATSAPP BRIDGE] Dispatching outbound message to ${targetChat} (requested: ${chatId})`);
+
   try {
-    const targetChat = chatId.includes("@") ? chatId : `${chatId.replace(/\D/g, "")}@c.us`;
     await client.sendMessage(targetChat, message);
-    res.json({ status: "sent", targetChat });
+    console.log(`[WHATSAPP BRIDGE] Successfully delivered message to ${targetChat}`);
+    return res.json({ status: "sent", targetChat });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.warn(`[WHATSAPP BRIDGE] Send to ${targetChat} failed: ${err.message}`);
+
+    // If @c.us failed with LID error, retry with @lid immediately
+    if (targetChat.endsWith("@c.us") && (err.message.includes("LID") || err.message.includes("No LID"))) {
+      const lidChat = targetChat.replace("@c.us", "@lid");
+      try {
+        console.log(`[WHATSAPP BRIDGE] Retrying with LID target: ${lidChat}`);
+        await client.sendMessage(lidChat, message);
+        jidRegistry.set(clean, lidChat);
+        console.log(`[WHATSAPP BRIDGE] Successfully delivered via LID fallback: ${lidChat}`);
+        return res.json({ status: "sent", targetChat: lidChat, fallback: "lid" });
+      } catch (lidErr) {
+        console.error(`[WHATSAPP BRIDGE] LID fallback error: ${lidErr.message}`);
+      }
+    }
+
+    // If @lid failed, try @c.us
+    if (targetChat.endsWith("@lid")) {
+      const cusChat = targetChat.replace("@lid", "@c.us");
+      try {
+        console.log(`[WHATSAPP BRIDGE] Retrying with @c.us target: ${cusChat}`);
+        await client.sendMessage(cusChat, message);
+        jidRegistry.set(clean, cusChat);
+        console.log(`[WHATSAPP BRIDGE] Successfully delivered via @c.us fallback: ${cusChat}`);
+        return res.json({ status: "sent", targetChat: cusChat, fallback: "c.us" });
+      } catch (cusErr) {
+        console.error(`[WHATSAPP BRIDGE] @c.us fallback error: ${cusErr.message}`);
+      }
+    }
+
+    addLog("error", "Mesaj Gönderim Hatası", `${targetChat}: ${err.message}`);
+    res.status(500).json({ error: err.message, targetChat });
   }
 });
 
@@ -852,7 +947,13 @@ app.listen(BRIDGE_API_PORT, () => {
   console.log(`[BRIDGE] WhatsApp Web Session Bridge listening on http://127.0.0.1:${BRIDGE_API_PORT}`);
   console.log(`[BRIDGE] Default Branch: ${DEFAULT_BRANCH} -> Webhook: ${BACKEND_WEBHOOK_URL}`);
   syncFilterSettingsFromBackend();
-  if (process.env.AUTO_START_BRIDGE === "true") {
+  // Auto-initialize if session directory exists or AUTO_START_BRIDGE is true
+  const sessionExists = fs.existsSync(AUTH_DATA_PATH) && fs.existsSync(path.join(AUTH_DATA_PATH, "session"));
+  if (sessionExists || process.env.AUTO_START_BRIDGE === "true") {
+    console.log("[BRIDGE] Existing WhatsApp session found, auto-initializing client...");
     initializeWhatsAppClient();
+  } else {
+    console.log("[BRIDGE] No existing session found. Awaiting pairing or manual connect.");
   }
 });
+

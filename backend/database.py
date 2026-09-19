@@ -186,8 +186,166 @@ def init_db(db_path: Optional[str] = None) -> None:
     logger.info("Database schema initialized and verified successfully.")
 
 
+UNIVERSAL_MASTER_KB = """# 🌐 NAVITAS SPA & WELLNESS — EVRENSEL BİLGİ BANKASI VE HİZMET REHBERİ
+
+## 🏢 Kurumsal Profil & Hizmet Felsefesi
+Navitas Spa & Wellness; Türkiye genelinde 5 yıldızlı uluslararası seçkin otel zincirleri bünyesinde (Hilton, Sheraton, Curio Collection, DoubleTree by Hilton, Wanda Vista, Steigenberger, Mövenpick, Sinpaş Thermal Resort, Fenerbahçe Resort) lüks spa, geleneksel Türk hamamı, şifalı termal sular, kapalı yüzme havuzları ve uzman masaj terapileri sunmaktadır.
+
+---
+## 🌿 Masaj Koleksiyonu & Terapiler (Tüm Şubelerimizde Geçerlidir)
+1. **Antistress Masajı (60 dk):** Günlük stres ve yorgunluğu gidermek için bel, sırt ve boyun odaklı yumuşak, ritmik masaj.
+2. **Klasik İsveç Masajı (50 dk):** Tüm vücut kan dolaşımını canlandıran, kas liflerini gevşeten orta basınçlı batı klasiği.
+3. **Spor Masajı (45 / 60 dk):** Yoğun antrenman veya doğa yürüyüşü sonrası kaslardaki laktik asidi dağıtan, derin manipülasyon ve esnetme içeren güçlü seans. (Özellikle Topuk Yaylası ve havalimanı misafirlerimizde çok tercih edilir).
+4. **Derin Doku (Deep Tissue) Masajı (45 dk):** Kronik boyun, kürek kemiği ve bel tutulmalarında tetik noktalara uygulanan sert ve terapötik masaj.
+5. **Geleneksel Bali Masajı (50 / 90 dk):** Uzak Doğulu uzman terapistlerimiz tarafından bitkisel yağlar ve akupresur baskılarıyla uygulanan holistik enerji masajı.
+6. **Ilık Mum Masajı (50 dk):** Doğal soya ve shea yağından üretilmiş sıcak mum damlaları ile uygulanan yoğun besleyici ve ipeksi bakım.
+7. **Aromaterapi Masajı (50 dk):** Saf bitki özleriyle sinir sistemini yatıştıran zihinsel ve bedensel dinginlik seansı.
+8. **Medikal Masaj (50 dk):** Eklem ve omurga hassasiyeti olan misafirler için özel bitkisel balsamlar ve fizyoterapi teknikleriyle uygulanan terapi.
+9. **Sıcak Volkanik Taş Masajı (60 dk):** Isıtılmış bazalt taşlarıyla kas spazmlarını çözen derin ısı terapisi.
+10. **Sultan Masajı (50 dk - 4 El):** İki uzman terapistin aynı anda uyguladığı senkronize çift uzman masajı.
+11. **Refleksoloji (Ayak Masajı - 30 dk):** Ayak tabanındaki organ refleks noktalarına uygulanan akupresur masajı.
+12. **Selülit & Lenf Drenaj Masajı (50 dk):** Dolaşımı hızlandırarak toksin ve ödem atılımını sağlayan sıkılaştırıcı bakım.
+
+---
+## 🛁 Türk Hamamı Ritüelleri & Özel Bakımlar
+- **Geleneksel Kese & Köpük (45 dk):** Göbek taşında terleme, ipek kese ile ölü deriden arınma ve saf zeytinyağlı sabunla yoğun köpük masajı.
+- **Navitas Signature Ritüeli (60 dk):** Kese ve köpüğe ek deniz tuzu/kahve vücut peelingi ve nemlendirici vücut maskesi.
+- **Sultan Hamamı (50 dk - 4 El):** Göbek taşında iki görevli tarafından uygulanan 4 el geleneksel saray hamamı.
+- **Hydrafacial Cilt Bakımı:** Vakumla gözenek temizliği, peeling, hyaluronik asit nem ve anti-aging kolajen lifting.
+- **VIP Çift Süiti (Private Suite):** Çiftlere özel tahsis edilen süitte kese-köpük, çift masajı, sauna, jakuzi, taze meyve sepeti ve detoks ikramı.
+- **Gelin Hamamı:** Kadınlar bölümünün özel tahsisi, müzik, saray şerbeti, meyve ve çerez ikramları eşliğinde organizasyon.
+
+---
+## ⚠️ Rezervasyon ve Misafir Kuralları
+1. **İptal & Değişiklik:** Randevudan en az 4 saat öncesine kadar değişiklik ve iptal tamamen ücretsizdir.
+2. **Varış Saati:** Seans sürenizden kayıp yaşamamak için randevudan 10-15 dakika önce gelinmesi önerilir.
+3. **Sağlanan Malzemeler:** Bornoz, peştamal, havlu, şampuan, duş jeli ve tek kullanımlık terlikler temin edilir.
+4. **Havuz Hijyen Standardı:** Hijyen standartlarımız gereği havuz kullanımında bone takılması zorunludur. Misafir kendi mayosunu getirmelidir.
+5. **Yaş Sınırı:** 18 yaş altı misafirlerimiz yalnızca ebeveyn refakatiyle kabul edilir.
+6. **Hamilelik Protokolü:** İlk 3 ay masaj önerilmez; sonraki dönemde hafif masaj yapılabilir ancak sauna, hamam ve sıcak ıslak alanlar uygun değildir.
+7. **Fiyatlandırma:** Fiyatlarımız kişi başıdır; seçilen şubeye ve seans süresine göre değiştiği için anlık teyit edilir.
+
+---
+## 📍 TÜM TÜRKİYE ŞUBELERİMİZ VE LOKASYON REHBERİ (16 MERKEZ / 9 ŞEHİR)
+
+### 1. İSTANBUL HAVALİMANI (Hilton Istanbul Airport) — İstanbul
+- **Otel:** Hilton Istanbul Airport
+- **Konum:** İmrahor Mah. Terminal Cad. No:13, 34283 Arnavutköy / İstanbul (Terminal binası yanı)
+- **Havalimanı Özel Kuralı:** Tesisimiz kara tarafındadır (landside). Dış hat aktarma yolcuları pasaporttan geçerek gelebilir. Resepsiyonda kilitli valiz dolapları mevcuttur. Uçuş rötarlarında esnek randevu kaydırması yapılır.
+- **Saatler:** 07:00 – 22:00 | **Tel:** +90 535 814 07 44
+- **Olanaklar:** Kapalı yüzme havuzu, Türk hamamı, buhar odası, sauna, transit jet lag masajları.
+- **Durum:** Aktif olarak hizmet vermektedir.
+
+### 2. MALL OF İSTANBUL (Hilton Mall of Istanbul) — İstanbul
+- **Otel:** Hilton Mall of Istanbul
+- **Konum:** Ziya Gökalp Mah. Süleyman Demirel Blv. No:7E, 34490 Başakşehir / İstanbul (AVM bitişiği)
+- **Saatler:** 10:00 – 22:00 | **Tel:** +90 530 171 05 44
+- **Olanaklar:** Aynalı tavanlı kapalı yüzme havuzu, geleneksel hamam, VIP süit, jakuzi, sauna, Hydrafacial odaları.
+- **Durum:** Aktif olarak hizmet vermektedir.
+
+### 3. TOPKAPI (DoubleTree by Hilton Topkapı) — İstanbul
+- **Otel:** DoubleTree by Hilton Istanbul Topkapi
+- **Konum:** Ortamahalle Mah. Anıt Cad. No:1, 34033 Zeytinburnu / İstanbul
+- **Saatler:** 08:00 – 22:00 | **Tel:** +90 533 153 54 44
+- **Olanaklar:** Geniş kapalı yüzme havuzu, geleneksel Türk hamamı, buhar odası, sauna, fitness.
+- **Durum:** Aktif olarak hizmet vermektedir.
+
+### 4. LALELİ (Crowne Plaza Old City) — İstanbul
+- **Otel:** Crowne Plaza Istanbul - Old City
+- **Konum:** Balabanağa Mah. Fevziye Cad. No:1, 34134 Laleli / Fatih / İstanbul
+- **Saatler:** 09:00 – 22:00 | **Tel:** +90 530 667 92 44
+- **Olanaklar:** Otantik Türk hamamı, dinlenme havuzu, sauna, aroma buhar banyosu.
+- **Durum:** Aktif olarak hizmet vermektedir.
+
+### 5. 5. LEVENT (Torun Center / Levent Çarşı) — İstanbul
+- **Otel / Tesis:** Torun Center / 5. Levent Çarşı
+- **Konum:** Güzeltepe Mah. Mareşal Fevzi Çakmak Cad. No:29, 34060 Eyüpsultan / İstanbul
+- **Saatler:** 09:00 – 22:00 | **Tel:** +90 530 258 76 44
+- **Olanaklar:** Modern rezidans spa, geleneksel hamam, sauna, bölgesel incelme ve cilt bakımı.
+- **Durum:** Aktif olarak hizmet vermektedir.
+
+### 6. MAHMUTBEY (Wanda Vista Istanbul) — İstanbul
+- **Otel:** Wanda Vista Istanbul
+- **Konum:** Mahmutbey Mah. Peyami Safa Cad. No:44, 34218 Bağcılar / İstanbul (Basın Ekspres)
+- **Saatler:** 09:00 – 22:00 | **Tel:** +90 530 237 43 44
+- **Olanaklar:** Uzak Doğu ve Türk spa konsepti, kapalı havuz, lüks bakım odaları, sauna.
+- **Durum:** Aktif olarak hizmet vermektedir.
+
+### 7. HALKALI (Steigenberger Airport Hotel) — İstanbul
+- **Otel:** Steigenberger Airport Hotel Istanbul
+- **Konum:** Merkez Mah. Değirmenbahçe Cad. No:11, 34303 Küçükçekmece / İstanbul
+- **Saatler:** 09:00 – 22:00 | **Tel:** +90 530 915 28 44
+- **Olanaklar:** Kapalı yüzme havuzu, Türk hamamı, Fin saunası, şok duşlar.
+- **Durum:** Aktif olarak hizmet vermektedir.
+
+### 8. SULTANAHMET (Hagia Sofia Mansions) — İstanbul
+- **Otel:** Hagia Sofia Mansions, Curio Collection by Hilton
+- **Konum:** Soğuk Çeşme Sk. No:3, 34122 Fatih / İstanbul (Ayasofya yanı)
+- **Tel:** +90 530 954 28 44
+- **Durum:** **GEÇİCİ OLARAK TADİLATTADIR.** (Misafirlerimize Tarihi Yarımada'da Laleli veya Topkapı şubelerimiz önerilir).
+
+### 9. ANKARA HİLTON (Ankara HiltonSA) — Ankara
+- **Otel:** Ankara HiltonSA
+- **Konum:** Tahran Cad. No:12, 06700 Kavaklıdere / Çankaya / Ankara
+- **Saatler:** 08:00 – 22:00 | **Tel:** +90 533 051 46 44
+- **Olanaklar:** İkonik cam kubbeli kapalı yüzme havuzu, Türk hamamı, buhar odası, klasik sauna, dinlenme terası.
+- **Durum:** Aktif olarak hizmet vermektedir.
+
+### 10. ANKARA SHERATON (Sheraton Ankara Hotel & Convention Center) — Ankara
+- **Otel:** Sheraton Ankara Hotel & Convention Center
+- **Konum:** Noktalı Sok. No:1, 06700 Gaziosmanpaşa / Çankaya / Ankara
+- **Saatler:** 08:00 – 22:00 | **Tel:** +90 533 153 54 45
+- **Olanaklar:** Geniş ısıtmalı kapalı yüzme havuzu, geleneksel Türk hamamı, Fin saunası, buhar odası, VIP terapi süitleri.
+- **Durum:** Aktif olarak hizmet vermektedir.
+
+### 11. ÇERKEZKÖY (Lemar Çerkezköy) — Tekirdağ
+- **Otel / Tesis:** Lemar Çerkezköy
+- **Konum:** Gazi Mustafa Kemal Paşa Mah. Atatürk Cad. No:82, 59500 Çerkezköy / Tekirdağ
+- **Saatler:** 09:00 – 22:00 | **Tel:** +90 530 258 76 45
+- **Olanaklar:** Geleneksel hamam, sauna, buhar odası, rahatlatıcı masaj odaları.
+- **Durum:** Aktif olarak hizmet vermektedir.
+
+### 12. TOPUK YAYLASI (Fenerbahçe Topuk Yaylası Resort & Sport) — Düzce
+- **Otel:** Fenerbahçe Topuk Yaylası Resort
+- **Konum:** Orta Mah. 81900 Hacıazizler / Kaynaşlı / Düzce (Göknar ormanları ve göl kıyısı)
+- **Saatler:** 09:00 – 22:00 | **Tel:** +90 530 607 52 44
+- **Olanaklar:** Göl manzaralı kapalı yüzme havuzu, sporcu toparlanma masajları, Türk hamamı, buhar odası, sauna.
+- **Durum:** **AKTİF VE AÇIKTIR.** (Bolu Abant ile karıştırılmamalıdır; Topuk Yaylası kesintisiz açıktır).
+
+### 13. MARMARİS LUMİRA (Sinpaş Kızılbük Thermal Wellness Resort) — Muğla
+- **Otel:** Sinpaş Kızılbük Thermal Wellness Resort
+- **Konum:** İçmeler Mah. Kızılbük Mevkii, 48740 Marmaris / Muğla
+- **Saatler:** 09:00 – 22:00 | **Tel:** +90 530 743 64 97
+- **Olanaklar:** Şifalı termal kapalı/açık havuzlar, Kızılbük koy manzarası, geleneksel hamam, doğal termal çamur ve mineral peeling bakımları.
+- **Durum:** Aktif olarak hizmet vermektedir.
+
+### 14. ADANA HİLTON (Adana HiltonSA) — Adana
+- **Otel:** Adana HiltonSA
+- **Konum:** Sinanpaşa Mah. Hacı Sabancı Blv. No:1, 01220 Yüreğir / Adana
+- **Saatler:** 08:00 – 22:00 | **Tel:** +90 530 469 82 44
+- **Olanaklar:** Seyhan Nehri ve Taşköprü manzaralı kapalı havuz, mermer Türk hamamı, sauna, buhar odası.
+- **Durum:** Aktif olarak hizmet vermektedir.
+
+### 15. MALATYA MÖVENPİCK (Mövenpick Hotel Malatya) — Malatya
+- **Otel:** Mövenpick Hotel Malatya
+- **Konum:** İnönü Cad. No:174, 44090 Yeşilyurt / Malatya
+- **Saatler:** 08:00 – 22:00 | **Tel:** +90 530 385 41 44
+- **Olanaklar:** Kapalı yüzme havuzu, geleneksel Türk hamamı, sauna, buhar odası, fitness merkezi.
+- **Durum:** Aktif olarak hizmet vermektedir.
+
+### 16. BOLU ABANT (Abant) — Bolu
+- **Konum:** Yanık, Abant Yolu, 14030 Dereceören / Bolu
+- **Tel:** +90 530 268 94 44
+- **Durum:** **GEÇİCİ OLARAK TADİLATTADIR.**
+
+### 17. İZMİR BOMONTİ (Mahall Bomonti İzmir) — İzmir
+- **Konum:** Halkapınar Mah. Şehitler Cad. No:15, Konak / İzmir
+- **Durum:** **ÇOK YAKINDA AÇILACAKTIR.**
+"""
+
+
 def seed_database_if_empty(db_path: Optional[str] = None) -> None:
-    """Populates 17 Navitas Spa & Wellness luxury branches, initial users, knowledge bases, and settings."""
+    """Populates 17 Navitas Spa & Wellness luxury branches, universal knowledge base, initial users, and settings."""
     import auth
 
     with get_db(db_path) as conn:
@@ -201,7 +359,7 @@ def seed_database_if_empty(db_path: Optional[str] = None) -> None:
             cursor.execute("DELETE FROM branch_knowledge")
             cursor.execute("DELETE FROM users WHERE role != 'superadmin'")
 
-        # 1. Seed / Update 17 Navitas Branches
+        # 1. Seed / Update 17 Navitas Branches + Universal Master
         for branch in config.BRANCHES_CATALOG:
             cursor.execute("SELECT id FROM branches WHERE id = ?", (branch["id"],))
             if not cursor.fetchone():
@@ -236,74 +394,96 @@ def seed_database_if_empty(db_path: Optional[str] = None) -> None:
             b_id = branch["id"]
             cursor.execute("SELECT id FROM branch_knowledge WHERE branch_id = ?", (b_id,))
             if not cursor.fetchone():
-                amenities_str = "\n".join([f"- {a}" for a in branch["amenities"]])
-                pricing_str = "\n".join([f"- **{k.replace('_', ' ').title()}**: {v}" for k, v in branch["pricing"].items()])
+                if b_id == "universal":
+                    kb_markdown = UNIVERSAL_MASTER_KB.strip()
+                else:
+                    amenities_str = "\n".join([f"- {a}" for a in branch["amenities"]])
+                    pricing_str = "\n".join([f"- **{k.replace('_', ' ').title()}**: {v}" for k, v in branch["pricing"].items()])
 
-                special_notes = ""
-                if b_id == "istanbul-airport":
-                    special_notes = (
-                        "### ✈️ İstanbul Havalimanı Özel Bilgilendirme:\n"
-                        "- **Konum:** Hilton Istanbul Airport içinde, terminal binasına birkaç dakika yürüyüş mesafesinde, **kara tarafındadır (landside)**.\n"
-                        "- **Transit Yolcular:** Dış hat aktarma yolcularımızın pasaport kontrolünden geçmesi gerekir.\n"
-                        "- **Valiz & Eşya:** Resepsiyonda misafirlerimiz için kilitli dolap muhafazası mevcuttur.\n"
-                        "- **Uçuş Rötarları:** Uçuş saatlerindeki değişikliklerde esnek randevu güncellemesi sağlanır.\n\n"
-                    )
-                elif b_id in ["sultanahmet", "bolu-abant"]:
-                    special_notes = (
-                        "### ⚠️ Önemli Durum Bilgilendirmesi:\n"
-                        f"- **Tadilat Bildirimi:** {branch['name']} merkezimiz şu anda tadilat sürecindedir. Misafirlerimize en yakın alternatif şubelerimiz önerilmektedir.\n\n"
-                    )
-                elif b_id == "izmir-bomonti":
-                    special_notes = (
-                        "### 🌟 Açılış Bilgilendirmesi:\n"
-                        "- **Çok Yakında Açılıyor:** Mahall Bomonti İzmir merkezimiz için hazırlıklarımız tamamlanmak üzeredir.\n\n"
-                    )
+                    special_notes = ""
+                    if b_id == "istanbul-airport":
+                        special_notes = (
+                            "### ✈️ İstanbul Havalimanı Özel Bilgilendirme:\n"
+                            "- **Konum:** Hilton Istanbul Airport içinde, terminal binasına birkaç dakika yürüyüş mesafesinde, **kara tarafındadır (landside)**.\n"
+                            "- **Transit Yolcular:** Dış hat aktarma yolcularımızın pasaport kontrolünden geçmesi gerekir.\n"
+                            "- **Valiz & Eşya:** Resepsiyonda misafirlerimiz için kilitli dolap muhafazası mevcuttur.\n"
+                            "- **Uçuş Rötarları:** Uçuş saatlerindeki değişikliklerde esnek randevu güncellemesi sağlanır.\n\n"
+                        )
+                    elif b_id in ["sultanahmet", "bolu-abant"]:
+                        special_notes = (
+                            "### ⚠️ Önemli Durum Bilgilendirmesi:\n"
+                            f"- **Tadilat Bildirimi:** {branch['name']} merkezimiz şu anda tadilat sürecindedir. Misafirlerimize en yakın alternatif şubelerimiz önerilmektedir.\n\n"
+                        )
+                    elif b_id == "izmir-bomonti":
+                        special_notes = (
+                            "### 🌟 Açılış Bilgilendirmesi:\n"
+                            "- **Çok Yakında Açılıyor:** Mahall Bomonti İzmir merkezimiz için hazırlıklarımız tamamlanmak üzeredir.\n\n"
+                        )
 
-                kb_markdown = (
-                    f"# {branch['name']} — Resmi Bilgi Bankası ve Hizmet Rehberi\n\n"
-                    f"## 📍 Konum & İletişim\n"
-                    f"- **Şube / Merkez:** {branch['name']}\n"
-                    f"- **Şehir:** {branch['city']}\n"
-                    f"- **Adres:** {branch['address']}\n"
-                    f"- **İletişim & WhatsApp Randevu:** {branch['phone']}\n"
-                    f"- **E-posta:** {branch['email']}\n"
-                    f"- **Spa Yöneticisi:** {branch['manager_name']}\n\n"
-                    f"## 🕒 Çalışma Saatleri\n"
-                    f"- Haftanın her günü **{branch['check_in']} – {branch['check_out']}** saatleri arasında açıktır.\n\n"
-                    f"{special_notes}"
-                    f"## 🌿 Şube Olanakları & Tesis Donanımı\n"
-                    f"{amenities_str}\n\n"
-                    f"## 💆‍♀️ Masaj Hizmetleri Koleksiyonu\n"
-                    f"1. **Antistress Masajı (60 dk):** Bel, boyun ve sırttaki gerginlikleri hedefleyen ritmik rahatlama.\n"
-                    f"2. **Klasik İsveç Masajı (50 dk):** Tüm vücut kan dolaşımını ve kas tonusunu canlandırıcı terapi.\n"
-                    f"3. **Spor Masajı (45 dk):** Derin manipülasyon ve esnetmelerle laktik asit toparlanması.\n"
-                    f"4. **Derin Doku Masajı (45 dk):** Tetik noktalar ve kronik kas sertliklerine yönelik yüksek basınçlı dokunuş.\n"
-                    f"5. **Bali Masajı (50/90 dk):** Doğal bitkisel yağlar ve akupresur baskılarıyla enerji dengeleme.\n"
-                    f"6. **Mum Masajı (50 dk):** Ilık soya/shea mumu ile yoğun nem ve ipeksi sıcaklık.\n"
-                    f"7. **Aromaterapi Masajı (50 dk):** Saf aromatik bitki özleriyle zihinsel ve bedensel arınma.\n"
-                    f"8. **Medikal Masaj (50 dk):** Özel medikal kremler eşliğinde eklem ve kas tedavisi.\n"
-                    f"9. **Sıcak Taş Masajı (60 dk):** Volkanik bazalt taşlarının ısısıyla derin gevşeme.\n"
-                    f"10. **Sultan Masajı (50 dk - 4 El):** İki uzman terapistin aynı anda uyguladığı senkronize lüks.\n"
-                    f"11. **Refleksoloji (Ayak Masajı - 30 dk):** Ayak tabanı refleks noktalarına uygulanan akupresur.\n"
-                    f"12. **Selülit Masajı (50 dk):** Dolaşımı hızlandıran ödem atıcı sıkılaştırıcı bakım.\n\n"
-                    f"## 🛁 Hamam Ritüelleri & Cilt Bakımı\n"
-                    f"- **Geleneksel Kese & Köpük (45 dk):** İpek kese ve organik zeytinyağlı yoğun köpük masajı.\n"
-                    f"- **Navitas Signature Ritüeli (60 dk):** Kese ve köpüğe ek vücut peelingi ve nem maskesi.\n"
-                    f"- **Sultan Hamamı (50 dk):** Çift görevli ile uygulanan 4 el geleneksel hamam ritüeli.\n"
-                    f"- **Hydrafacial Cilt Bakımı:** Tek seansta derin gözenek temizliği, vakum, peeling ve nem infüzyonu.\n"
-                    f"- **VIP Ritüeli:** Çiftlere özel süitte kese-köpük, çift masajı, sauna, jakuzi, taze meyve/detoks ikramı ve Smart TV sinema keyfi.\n"
-                    f"- **Gelin Hamamı:** Kadınlar bölümü özel tahsisi, saray şerbeti, lüks çerez ve meyve ikramı (09:00 - 14:00, max 15 kişi).\n\n"
-                    f"## 💰 Fiyatlandırma Politikası\n"
-                    f"{pricing_str}\n"
-                    f"*(Fiyatlar kişi başıdır; şubeye ve dönemsel paketlere göre değiştiği için WhatsApp veya telefonla anlık teyit edilir.)*\n\n"
-                    f"## ⚠️ Rezervasyon ve Misafir Kuralları\n"
-                    f"1. **İptal & Değişiklik:** Randevudan en az 4 saat öncesine kadar değişiklik ve iptal tamamen ücretsizdir.\n"
-                    f"2. **Varış Saati:** Seans sürenizden kayıp yaşamamak için randevudan 10-15 dakika önce gelinmesi önerilir.\n"
-                    f"3. **Sağlanan Malzemeler:** Bornoz, peştamal, havlu, şampuan, duş jeli ve tek kullanımlık terlikler temin edilir.\n"
-                    f"4. **Havuz Kuralları:** Hijyen standartlarımız gereği havuz kullanımında bone takılması zorunludur. Misafir kendi mayosunu getirmelidir.\n"
-                    f"5. **Yaş Sınırı:** 18 yaş altı misafirlerimiz yalnızca ebeveyn refakatiyle kabul edilir.\n"
-                    f"6. **Hamilelik:** İlk 3 ay masaj önerilmez; sonraki dönemde hafif masaj yapılabilir ancak sauna, hamam ve sıcak ıslak alanlar uygun değildir.\n"
-                )
+                    kb_markdown = (
+                        f"# {branch['name']} — Resmi Bilgi Bankası ve Hizmet Rehberi\n\n"
+                        f"## 📍 Konum & İletişim\n"
+                        f"- **Şube / Merkez:** {branch['name']}\n"
+                        f"- **Şehir:** {branch['city']}\n"
+                        f"- **Adres:** {branch['address']}\n"
+                        f"- **İletişim & WhatsApp Randevu:** {branch['phone']}\n"
+                        f"- **E-posta:** {branch['email']}\n"
+                        f"- **Spa Yöneticisi:** {branch['manager_name']}\n\n"
+                        f"## 🕒 Çalışma Saatleri\n"
+                        f"- Haftanın her günü **{branch['check_in']} – {branch['check_out']}** saatleri arasında açıktır.\n\n"
+                        f"{special_notes}"
+                        f"## 🌿 Şube Olanakları & Tesis Donanımı\n"
+                        f"{amenities_str}\n\n"
+                        f"## 💆‍♀️ Masaj Hizmetleri Koleksiyonu\n"
+                        f"1. **Antistress Masajı (60 dk):** Bel, boyun ve sırttaki gerginlikleri hedefleyen ritmik rahatlama.\n"
+                        f"2. **Klasik İsveç Masajı (50 dk):** Tüm vücut kan dolaşımını ve kas tonusunu canlandırıcı terapi.\n"
+                        f"3. **Spor Masajı (45 dk):** Derin manipülasyon ve esnetmelerle laktik asit toparlanması.\n"
+                        f"4. **Derin Doku Masajı (45 dk):** Tetik noktalar ve kronik kas sertliklerine yönelik yüksek basınçlı dokunuş.\n"
+                        f"5. **Bali Masajı (50/90 dk):** Doğal bitkisel yağlar ve akupresur baskılarıyla enerji dengeleme.\n"
+                        f"6. **Mum Masajı (50 dk):** Ilık soya/shea mumu ile yoğun nem ve ipeksi sıcaklık.\n"
+                        f"7. **Aromaterapi Masajı (50 dk):** Saf aromatik bitki özleriyle zihinsel ve bedensel arınma.\n"
+                        f"8. **Medikal Masaj (50 dk):** Özel medikal kremler eşliğinde eklem ve kas tedavisi.\n"
+                        f"9. **Sıcak Taş Masajı (60 dk):** Volkanik bazalt taşlarının ısısıyla derin gevşeme.\n"
+                        f"10. **Sultan Masajı (50 dk - 4 El):** İki uzman terapistin aynı anda uyguladığı senkronize lüks.\n"
+                        f"11. **Refleksoloji (Ayak Masajı - 30 dk):** Ayak tabanı refleks noktalarına uygulanan akupresur.\n"
+                        f"12. **Selülit Masajı (50 dk):** Dolaşımı hızlandıran ödem atıcı sıkılaştırıcı bakım.\n\n"
+                        f"## 🛁 Hamam Ritüelleri & Cilt Bakımı\n"
+                        f"- **Geleneksel Kese & Köpük (45 dk):** İpek kese ve organik zeytinyağlı yoğun köpük masajı.\n"
+                        f"- **Navitas Signature Ritüeli (60 dk):** Kese ve köpüğe ek vücut peelingi ve nem maskesi.\n"
+                        f"- **Sultan Hamamı (50 dk):** Çift görevli ile uygulanan 4 el geleneksel hamam ritüeli.\n"
+                        f"- **Hydrafacial Cilt Bakımı:** Tek seansta derin gözenek temizliği, vakum, peeling ve nem infüzyonu.\n"
+                        f"- **VIP Ritüeli:** Çiftlere özel süitte kese-köpük, çift masajı, sauna, jakuzi, taze meyve/detoks ikramı ve Smart TV sinema keyfi.\n"
+                        f"- **Gelin Hamamı:** Kadınlar bölümü özel tahsisi, saray şerbeti, lüks çerez ve meyve ikramı (09:00 - 14:00, max 15 kişi).\n\n"
+                        f"## 💰 Fiyatlandırma Politikası\n"
+                        f"{pricing_str}\n"
+                        f"*(Fiyatlar kişi başıdır; şubeye ve dönemsel paketlere göre değiştiği için WhatsApp veya telefonla anlık teyit edilir.)*\n\n"
+                        f"## ⚠️ Rezervasyon ve Misafir Kuralları\n"
+                        f"1. **İptal & Değişiklik:** Randevudan en az 4 saat öncesine kadar değişiklik ve iptal tamamen ücretsizdir.\n"
+                        f"2. **Varış Saati:** Seans sürenizden kayıp yaşamamak için randevudan 10-15 dakika önce gelinmesi önerilir.\n"
+                        f"3. **Sağlanan Malzemeler:** Bornoz, peştamal, havlu, şampuan, duş jeli ve tek kullanımlık terlikler temin edilir.\n"
+                        f"4. **Havuz Kuralları:** Hijyen standartlarımız gereği havuz kullanımında bone takılması zorunludur. Misafir kendi mayosunu getirmelidir.\n"
+                        f"5. **Yaş Sınırı:** 18 yaş altı misafirlerimiz yalnızca ebeveyn refakatiyle kabul edilir.\n"
+                        f"6. **Hamilelik:** İlk 3 ay masaj önerilmez; sonraki dönemde hafif masaj yapılabilir ancak sauna, hamam ve sıcak ıslak alanlar uygun değildir.\n\n"
+                        f"## 🏢 Navitas Spa Türkiye Şube ve Lokasyon Rehberi (Tüm Merkezler)\n"
+                        f"Navitas Spa & Wellness olarak Türkiye genelinde 5 yıldızlı seçkin oteller bünyesinde 16 merkezimizle hizmet vermekteyiz:\n\n"
+                        f"• **İstanbul Havalimanı (Hilton Istanbul Airport)** — İstanbul (Havalimanı Terminali yanı, kara tarafı / 07:00 – 22:00 / Aktif)\n"
+                        f"• **Mall of İstanbul (Hilton Mall of Istanbul)** — İstanbul (Süleyman Demirel Blv. Başakşehir / 10:00 – 22:00 / Aktif)\n"
+                        f"• **Topkapı (DoubleTree by Hilton Topkapı)** — İstanbul (Ortamahalle Zeytinburnu / 08:00 – 22:00 / Aktif)\n"
+                        f"• **Laleli (Crowne Plaza Old City)** — İstanbul (Ordu Cad. Tarihi Yarımada / 09:00 – 22:00 / Aktif)\n"
+                        f"• **5. Levent (Torun Center / Levent Çarşı)** — İstanbul (Alibeyköy Eyüpsultan / 09:00 – 22:00 / Aktif)\n"
+                        f"• **Mahmutbey (Wanda Vista Istanbul)** — İstanbul (Bağcılar Basın Ekspres / 09:00 – 22:00 / Aktif)\n"
+                        f"• **Halkalı (Steigenberger Airport Hotel)** — İstanbul (Küçükçekmece Halkalı / 09:00 – 22:00 / Aktif)\n"
+                        f"• **Sultanahmet (Hagia Sofia Mansions)** — İstanbul (Geçici tadilattadır; misafirlerimize Laleli veya Topkapı önerilir)\n"
+                        f"• **Ankara Hilton (Ankara HiltonSA)** — Ankara (Kavaklıdere / Cam kubbeli kapalı yüzme havuzu, Türk hamamı / Aktif)\n"
+                        f"• **Ankara Sheraton (Sheraton Ankara Hotel & Convention Center)** — Ankara (Gaziosmanpaşa / Kapalı yüzme havuzu, Fin saunası / Aktif)\n"
+                        f"• **Çerkezköy (Lemar Çerkezköy)** — Tekirdağ (Gazi Mustafa Kemal Paşa Mah. Çerkezköy / 09:00 – 22:00 / Aktif)\n"
+                        f"• **Topuk Yaylası (Fenerbahçe Topuk Yaylası Resort)** — Düzce (Kaynaşlı / Göl manzaralı kapalı havuz, sporcu masajları / Aktif açık)\n"
+                        f"• **Marmaris Lumira (Sinpaş Kızılbük Thermal Resort)** — Muğla (İçmeler Marmaris / Şifalı termal havuzlar, koy manzarası / Aktif açık)\n"
+                        f"• **Adana Hilton (Adana HiltonSA)** — Adana (Sinanpaşa Yüreğir / Seyhan Nehri manzaralı kapalı havuz, hamam / Aktif)\n"
+                        f"• **Malatya Mövenpick (Mövenpick Hotel Malatya)** — Malatya (İnönü Cad. Yeşilyurt / Kapalı havuz, geleneksel hamam / Aktif)\n"
+                        f"• **Abant (Abant)** — Bolu (Abant Yolu Dereceören / Geçici tadilat dolayısıyla kapalıdır)\n"
+                        f"• **İzmir Bomonti (Mahall Bomonti İzmir)** — İzmir (Halkapınar Konak / Çok yakında açılacaktır)\n"
+                    )
                 cursor.execute(
                     """
                     INSERT INTO branch_knowledge (branch_id, content_markdown, structured_json, updated_by)
@@ -727,6 +907,11 @@ def get_branch_knowledge(branch_id: str, db_path: Optional[str] = None) -> Optio
         )
         row = cursor.fetchone()
         return dict(row) if row else None
+
+
+def get_universal_knowledge(db_path: Optional[str] = None) -> Optional[Dict[str, Any]]:
+    """Retrieves the universal master knowledge base."""
+    return get_branch_knowledge("universal", db_path=db_path)
 
 
 def update_branch_knowledge(

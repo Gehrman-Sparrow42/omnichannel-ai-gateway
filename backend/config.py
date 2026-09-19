@@ -134,6 +134,24 @@ ENABLE_OFFTOPIC_FILTER = os.getenv("ENABLE_OFFTOPIC_FILTER", "true").lower() == 
 NTFY_SERVER_URL = os.getenv("NTFY_SERVER_URL", "https://ntfy.sh")
 NTFY_GLOBAL_TOPIC = os.getenv("NTFY_GLOBAL_TOPIC", "navitas-spa-global-alerts")
 
+UNIVERSAL_BRANCH: Dict[str, Any] = {
+    "id": "universal",
+    "name": "🌐 Evrensel Bilgi Bankası (Tüm Şubeler)",
+    "city": "Türkiye Geneli",
+    "address": "Tüm 5 Yıldızlı Otel & Tesis Lokasyonlarımız",
+    "phone": "+90 535 814 07 44",
+    "email": "info@navitasspa.com",
+    "manager_name": "Merkezi Operasyon Direktörlüğü",
+    "ntfy_topic": "navitas-universal",
+    "check_in": "08:00",
+    "check_out": "22:00",
+    "pricing": {
+        "standart_tarife": "Tüm şubelerimizde geçerli seans ve paket seçenekleri"
+    },
+    "amenities": ["16 Spa Merkezi", "12 Masaj Türü", "Geleneksel Hamam", "Termal Havuzlar", "VIP Süitler"],
+    "description": "Türkiye genelinde 16 merkezimizin tüm detaylarını, otel bilgilerini, genel spa kurallarını ve ortak protokollerini içeren ana evrensel bilgi bankası."
+}
+
 # =====================================================================
 # Navitas Spa & Wellness Catalog: 17 Distinct Luxury Hotel Spas
 # =====================================================================
@@ -467,6 +485,7 @@ BRANCHES_CATALOG: List[Dict[str, Any]] = [
 
 # Quick lookup map for branches
 BRANCHES_MAP: Dict[str, Dict[str, Any]] = {b["id"]: b for b in BRANCHES_CATALOG}
+BRANCHES_MAP["universal"] = UNIVERSAL_BRANCH
 
 def get_branch_by_id(branch_id: str) -> Optional[Dict[str, Any]]:
     """Returns branch definition dict or None."""

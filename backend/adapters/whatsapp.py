@@ -43,12 +43,14 @@ class WhatsAppAdapter(BaseChannelAdapter):
             phone = str(payload.get("phone", "")).strip()
             text = str(payload.get("message", "")).strip()
             name = str(payload.get("contact_name", "")).strip()
+            chat_id = str(payload.get("chat_id", "")).strip()
+            target_id = chat_id if "@" in chat_id else phone
             if phone and text:
                 messages.append(
                     UniversalMessage(
                         channel="whatsapp",
                         branch_id=branch_id,
-                        customer_id=phone,
+                        customer_id=target_id,
                         customer_name=name or phone,
                         text=text,
                         metadata={"source": "bridge", "raw": payload},
@@ -137,19 +139,24 @@ class WhatsAppAdapter(BaseChannelAdapter):
         # 2. Fallback to Local Bridge
         bridge_url = f"{config.BRIDGE_API_URL.rstrip('/')}/send-message"
         try:
-            async with httpx.AsyncClient(timeout=10.0) as client:
-                chat_id = f"{clean_phone}@c.us" if "@" not in customer_id else customer_id
+            if "@" in customer_id:
+                chat_id = customer_id
+            elif len(clean_phone) >= 14 and not clean_phone.startswith(("90", "49", "1")):
+                chat_id = f"{clean_phone}@lid"
+            else:
+                chat_id = f"{clean_phone}@c.us"
+
+            async with httpx.AsyncClient(timeout=15.0) as client:
                 resp = await client.post(
                     bridge_url,
                     json={"chatId": chat_id, "message": text},
                 )
                 if resp.status_code == 200:
-                    logger.info("[WHATSAPP] Bridge sent message to %s", chat_id)
+                    logger.info("[WHATSAPP] Bridge successfully delivered message to %s", chat_id)
                     return True
                 else:
-                    logger.warning("[WHATSAPP] Bridge returned HTTP %d: %s", resp.status_code, resp.text)
+                    logger.error("[WHATSAPP] Bridge failed HTTP %d: %s", resp.status_code, resp.text)
+                    return False
         except Exception as bridge_exc:
-            logger.debug("[WHATSAPP] Bridge not reachable: %s", bridge_exc)
-
-        logger.info("[WHATSAPP MOCK] Outbound message logged for %s: '%s...'", clean_phone, text[:60])
-        return True
+            logger.error("[WHATSAPP] Bridge request failed: %s", bridge_exc)
+            return False

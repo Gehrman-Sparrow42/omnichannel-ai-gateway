@@ -20,114 +20,124 @@
 
     <!-- Top Navigation Header -->
     <header class="top-nav">
-      
-      <!-- Left: Brand Logo & Title -->
-      <div class="brand-section">
-        <div class="brand-logo">
-          <i class="fa-solid fa-spa"></i>
+      <!-- Left Group: Brand & Branch Switcher -->
+      <div class="nav-group-left">
+        <div class="brand-section">
+          <div class="brand-logo">
+            <i class="fa-solid fa-spa"></i>
+          </div>
+          <div class="brand-title">
+            <h1>
+              NAVITAS SPA & WELLNESS
+              <span class="brand-badge">17 Merkez</span>
+            </h1>
+            <span>4 Kanal Unified Control Hub</span>
+          </div>
         </div>
-        <div class="brand-title">
-          <h1>
-            NAVITAS SPA & WELLNESS
-            <span class="brand-badge">17 Merkez</span>
-          </h1>
-          <span>4 Kanal Unified Control Hub</span>
-        </div>
-      </div>
 
-      <!-- Center-Left: Branch Switcher Dropdown -->
-      <div class="branch-switcher-container">
-        <label for="branchSelect">Şube:</label>
-        <select id="branchSelect" class="branch-select" title="Aktif Şube Seçimi">
-          <option value="all">🌐 Tüm Şubeler (Global Bird's-Eye)</option>
-          <!-- 19 branches populated dynamically -->
-        </select>
-      </div>
+        <div class="nav-v-divider"></div>
 
-      <!-- Center: Navigation Tabs -->
-      <nav class="nav-tabs">
-        <button class="nav-tab-btn active" data-tab="inboxTab" title="Omnichannel Gelen Kutusu ve Sohbet Masası">
-          <i class="fa-brands fa-whatsapp"></i> <span>Sohbet Masası</span>
-        </button>
-        <button class="nav-tab-btn" data-tab="kbTab" title="Şube Kuralları ve Bilgi Bankası">
-          <i class="fa-solid fa-book-open"></i> <span>Bilgi Bankası</span>
-        </button>
-        <button class="nav-tab-btn" data-tab="analyticsTab" title="Şube Trafiği ve Analitik Raporlar">
-          <i class="fa-solid fa-chart-line"></i> <span>Analitik & KPI</span>
-        </button>
-        <button class="nav-tab-btn" data-tab="settingsTab" title="Yapay Zeka, Webhook ve Alarm Ayarları">
-          <i class="fa-solid fa-sliders"></i> <span>Ayarlar & Alarm</span>
-        </button>
-        <button class="nav-tab-btn" data-tab="logsTab" title="Sistem Olay Günlüğü">
-          <i class="fa-solid fa-terminal"></i> <span>Olay Günlüğü</span>
-        </button>
-      </nav>
-
-      <!-- Center-Right: Live Metric Chips -->
-      <div class="nav-metrics">
-        <div class="metric-chip" title="Toplam sohbet oturumu">
-          <i class="fa-solid fa-comments"></i> <span id="stat-chats-count">0</span>
-        </div>
-        <div class="metric-chip metric-lead" title="Rezervasyon adayı müşteriler">
-          <i class="fa-solid fa-star"></i> <span id="stat-leads-count">0</span>
-        </div>
-        <div class="metric-chip metric-muted" title="Susturulan / Temsilciye devredilen sohbetler">
-          <i class="fa-solid fa-microphone-slash"></i> <span id="stat-muted-count">0</span>
+        <div class="branch-switcher-container">
+          <label for="branchSelect">Şube:</label>
+          <select id="branchSelect" class="branch-select" title="Aktif Şube Seçimi">
+            <option value="all">🌐 Tüm Şubeler (Global Bird's-Eye)</option>
+            <!-- 19 branches populated dynamically -->
+          </select>
         </div>
       </div>
 
-      <!-- Right: Status Indicators & Quick Launchers -->
-      <div class="service-indicators">
-        <!-- WhatsApp Session Status Pill -->
-        <div class="status-pill offline" id="pill-whatsapp" onclick="openWhatsAppModal()" title="WhatsApp Web Oturum Yönetimi (Tıkla ve Bağla)">
-          <i class="fa-brands fa-whatsapp"></i>
-          <span id="waStatusText">WhatsApp: Kontrol</span>
-        </div>
-
-        <!-- Backend Status Pill -->
-        <div class="status-pill online" id="pill-backend" title="FastAPI Backend Durumu">
-          <div class="status-dot"></div>
-          <span id="systemStatusText">API Aktif</span>
-        </div>
-
-        <!-- Active Model Pill -->
-        <div class="status-pill online" id="pill-model" title="Aktif Yapay Zeka Modeli">
-          <i class="fa-solid fa-brain"></i>
-          <span id="activeModelBadge">gpt-4o-mini</span>
-        </div>
-
-        <!-- 1-Click Multi-Branch Demo Loader -->
-        <button class="nav-btn btn-demo-magic" id="seedDemoNavBtn" title="5 Farklı Lokasyon ve 4 Dilde Canlı Demo Sohbetlerini Yükle">
-          <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Demo Yükle</span>
-        </button>
-
-        <!-- Test Simulator Launcher -->
-        <button class="nav-btn btn-sim" id="openSimulatorBtn" title="Gelen Mesaj Test Simülatörü">
-          <i class="fa-solid fa-vial"></i> <span>Simülatör</span>
-        </button>
-
-        <!-- Test Mobile Push Alert -->
-        <button class="nav-btn" id="sendTestAlertBtn" title="ntfy.sh Mobil Push Alarmını Test Et">
-          <i class="fa-solid fa-bell"></i>
-        </button>
-
-        <!-- User Profile Pill -->
-        <div class="user-badge" id="userProfileBtn" title="Hesap Bilgileri">
-          <div class="user-avatar-sm" id="userAvatar">A</div>
-          <span id="userDisplayName">Yükleniyor...</span>
-        </div>
-
-        <!-- Logout / Lock -->
-        <button class="nav-btn btn-danger" id="logoutBtn" title="Oturumu Kapat / Kilitle">
-          <i class="fa-solid fa-lock"></i>
-        </button>
-
-        <!-- System Shutdown -->
-        <button class="nav-btn btn-danger btn-shutdown-nav" id="systemShutdownBtn" title="Sistem ve WhatsApp Köprüsünü Kapat" onclick="handleSystemShutdown()">
-          <i class="fa-solid fa-power-off"></i>
-        </button>
+      <!-- Center Group: Navigation Tabs -->
+      <div class="nav-group-center">
+        <nav class="nav-tabs">
+          <button class="nav-tab-btn active" data-tab="inboxTab" title="Omnichannel Gelen Kutusu ve Sohbet Masası">
+            <i class="fa-brands fa-whatsapp"></i> <span>Sohbet Masası</span>
+          </button>
+          <button class="nav-tab-btn" data-tab="kbTab" title="Şube Kuralları ve Bilgi Bankası">
+            <i class="fa-solid fa-book-open"></i> <span>Bilgi Bankası</span>
+          </button>
+          <button class="nav-tab-btn" data-tab="analyticsTab" title="Şube Trafiği ve Analitik Raporlar">
+            <i class="fa-solid fa-chart-line"></i> <span>Analitik & KPI</span>
+          </button>
+          <button class="nav-tab-btn" data-tab="settingsTab" title="Yapay Zeka, Webhook ve Alarm Ayarları">
+            <i class="fa-solid fa-sliders"></i> <span>Ayarlar & Alarm</span>
+          </button>
+          <button class="nav-tab-btn" data-tab="logsTab" title="Sistem Olay Günlüğü">
+            <i class="fa-solid fa-terminal"></i> <span>Olay Günlüğü</span>
+          </button>
+        </nav>
       </div>
 
+      <!-- Right Group: Metrics, Status Indicators & Actions -->
+      <div class="nav-group-right">
+        <!-- Live Metric Chips -->
+        <div class="nav-metrics">
+          <div class="metric-chip" title="Toplam sohbet oturumu">
+            <i class="fa-solid fa-comments"></i> <span id="stat-chats-count">0</span>
+          </div>
+          <div class="metric-chip metric-lead" title="Rezervasyon adayı müşteriler">
+            <i class="fa-solid fa-star"></i> <span id="stat-leads-count">0</span>
+          </div>
+          <div class="metric-chip metric-muted" title="Susturulan / Temsilciye devredilen sohbetler">
+            <i class="fa-solid fa-microphone-slash"></i> <span id="stat-muted-count">0</span>
+          </div>
+        </div>
+
+        <div class="nav-v-divider"></div>
+
+        <!-- Status Indicators & Quick Launchers -->
+        <div class="service-indicators">
+          <!-- WhatsApp Session Status Pill -->
+          <div class="status-pill offline" id="pill-whatsapp" onclick="openWhatsAppModal()" title="WhatsApp Web Oturum Yönetimi (Tıkla ve Bağla)">
+            <i class="fa-brands fa-whatsapp"></i>
+            <span id="waStatusText">WhatsApp: Kontrol</span>
+          </div>
+
+          <!-- Backend Status Pill -->
+          <div class="status-pill online" id="pill-backend" title="FastAPI Backend Durumu">
+            <div class="status-dot"></div>
+            <span id="systemStatusText">API Aktif</span>
+          </div>
+
+          <!-- Active Model Pill -->
+          <div class="status-pill online" id="pill-model" title="Aktif Yapay Zeka Modeli">
+            <i class="fa-solid fa-brain"></i>
+            <span id="activeModelBadge">gpt-4o-mini</span>
+          </div>
+
+          <!-- 1-Click Multi-Branch Demo Loader -->
+          <button class="nav-btn btn-demo-magic" id="seedDemoNavBtn" title="5 Farklı Lokasyon ve 4 Dilde Canlı Demo Sohbetlerini Yükle">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Demo Yükle</span>
+          </button>
+
+          <!-- Test Simulator Launcher -->
+          <button class="nav-btn btn-sim" id="openSimulatorBtn" title="Gelen Mesaj Test Simülatörü">
+            <i class="fa-solid fa-vial"></i> <span>Simülatör</span>
+          </button>
+
+          <!-- Test Mobile Push Alert -->
+          <button class="nav-btn" id="sendTestAlertBtn" title="ntfy.sh Mobil Push Alarmını Test Et">
+            <i class="fa-solid fa-bell"></i>
+          </button>
+
+          <div class="nav-v-divider-sm"></div>
+
+          <!-- User Profile Pill -->
+          <div class="user-badge" id="userProfileBtn" title="Hesap Bilgileri">
+            <div class="user-avatar-sm" id="userAvatar">A</div>
+            <span id="userDisplayName">Yükleniyor...</span>
+          </div>
+
+          <!-- Logout / Lock -->
+          <button class="nav-btn btn-danger" id="logoutBtn" title="Oturumu Kapat / Kilitle">
+            <i class="fa-solid fa-lock"></i>
+          </button>
+
+          <!-- System Shutdown -->
+          <button class="nav-btn btn-danger btn-shutdown-nav" id="systemShutdownBtn" title="Sistem ve WhatsApp Köprüsünü Kapat" onclick="handleSystemShutdown()">
+            <i class="fa-solid fa-power-off"></i>
+          </button>
+        </div>
+      </div>
     </header>
 
     <!-- Main Workspace Content Area -->
@@ -303,6 +313,12 @@
             <div class="kb-title">
               <h2 id="kbBranchTitle">Şube Bilgi Bankası & Kurallar</h2>
               <p>Şubenizin fiyatlarını, kurallarını ve konaklama bilgilerini canlı güncelleyin. Yapay zeka anında yeni verileri öğrenir.</p>
+            </div>
+            <div class="kb-branch-selector-wrap" style="display: flex; align-items: center; gap: 8px;">
+              <label for="kbBranchSelect" style="font-weight: 600; font-size: 0.9rem; color: var(--text-muted);"><i class="fa-solid fa-location-dot"></i> Düzenlenen Şube:</label>
+              <select id="kbBranchSelect" class="branch-select" title="Görüntülemek veya düzenlemek istediğiniz şubeyi seçiniz" style="padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-primary); font-size: 0.9rem; font-weight: 500; cursor: pointer;">
+                <!-- Populated dynamically with all branches -->
+              </select>
             </div>
             <div class="service-indicators">
               <span class="save-success-toast" id="kbSaveNotice">

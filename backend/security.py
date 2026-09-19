@@ -25,17 +25,50 @@ REFUSAL_OFFTOPIC = (
     "Ben yalnızca Navitas Spa & Wellness merkezlerimizle ilgili konularda "
     "(masaj terapileri, hamam ritüelleri, cilt bakımı, fitness, havuz ve rezervasyon) "
     "bilgi vermek üzere görevlendirilmiş resmi asistanım. "
-    "Spa dışı genel konularda, kod, şiir veya ödev yazımında destek verememekteyim. ✨"
+    "Spa dışı genel konularda, kod, şiir veya ödev yazımında destek verememekteyim."
 )
 
 REFUSAL_JAILBREAK = (
     "Üzgünüm, sistem güvenlik kuralları gereği bu tür komutları işleyemiyorum. "
-    "Yalnızca Navitas Spa & Wellness hizmetleri ve randevu süreçlerinizle ilgili sorularınıza memnuniyetle yanıt verebilirim. ✨"
+    "Yalnızca Navitas Spa & Wellness hizmetleri ve randevu süreçlerinizle ilgili sorularınıza memnuniyetle yanıt verebilirim."
 )
 
 FALLBACK_COORDINATOR = (
     "Bu konuyu ilgili şube spa koordinatörümüze iletiyorum, en kısa sürede size bilgi verilecektir."
 )
+
+
+def strip_all_internal_tags(text: str) -> str:
+    """
+    Robustly strips any internal system, routing, thinking, or bracket tags from user-facing replies.
+    Safe against:
+      - Variable spacing / line breaks inside brackets (e.g. '[ YETKILI_DEVRET: ... ]')
+      - Markdown bold / italic wrappers around tags (e.g. '**[YETKILI_DEVRET: ...]**')
+      - Missing colons or missing parameters (e.g. '[REZERVASYON]', '[YETKILI]')
+      - Thought / reasoning tags (e.g. '<think>...</think>', '<thought>...</thought>')
+      - Catch-all for any bracket tags containing internal keywords: YETKILI, REZERVASYON, INSAN, LEAD, DEVRET
+    """
+    if not text:
+        return ""
+
+    # 1. Strip reasoning / thinking tags (<think>...</think>, <reasoning>...</reasoning>, <thought>...</thought>)
+    cleaned = re.sub(r"<(?:think|reasoning|thought)[\s\S]*?</(?:think|reasoning|thought)>", "", text, flags=re.IGNORECASE)
+
+    # 2. Strip bracket tags with optional markdown bold/italic wrapper
+    bracket_tag_pattern = (
+        r"(?:\*{1,2}|_{1,2})?\[\s*"
+        r"(?:YETKILI(?:_DEVRET|_TALEBI)?|INSAN(?:_DEVRAL)?|REZERVASYON(?:_BILGILERI_TAMAM|_TAMAM|_BILGISI)?|LEAD(?:_TAMAM)?)"
+        r"(?::\s*[\s\S]*?)?\s*\](?:\*{1,2}|_{1,2})?"
+    )
+    cleaned = re.sub(bracket_tag_pattern, "", cleaned, flags=re.IGNORECASE)
+
+    # 3. Catch-all for any remaining bracket tags containing internal workflow tokens
+    cleaned = re.sub(r"\[\s*(?:YETKILI|REZERVASYON|INSAN|LEAD|DEVRET)[\s\S]*?\]", "", cleaned, flags=re.IGNORECASE)
+
+    # 4. Clean excessive spacing and blank lines
+    cleaned = re.sub(r"[ \t]+", " ", cleaned)
+    cleaned = re.sub(r"\n\s*\n\s*\n+", "\n\n", cleaned)
+    return cleaned.strip()
 
 
 class SecurityGuard:
@@ -166,14 +199,14 @@ class SecurityGuard:
         Sanitizes model output to eliminate foreign tokens, raw codeblocks, and unsolicited IBAN sharing.
         """
         if not assistant_reply or not assistant_reply.strip():
-            return "Size nasıl yardımcı olabilirim? Masaj, hamam veya bakım hizmetlerimizle ilgili bilgi alabilirsiniz. ✨"
+            return "Size nasıl yardımcı olabilirim? Masaj, hamam veya bakım hizmetlerimizle ilgili bilgi alabilirsiniz."
 
         reply = assistant_reply.strip()
 
         # 1. Detect CJK/Chinese foreign token leakage from base model
         if re.search(r"[\u4e00-\u9fff]", reply):
             logger.warning("Sanitizer caught foreign characters in reply. Overriding with clean response.")
-            return "Size nasıl yardımcı olabilirim? Masaj, hamam veya spa randevunuzla ilgili bilgi alabilirsiniz. ✨"
+            return "Size nasıl yardımcı olabilirim? Masaj, hamam veya spa randevunuzla ilgili bilgi alabilirsiniz."
 
         # 2. Intercept code block leakage
         if re.search(r"```(python|javascript|html|css|json|sql|bash|sh)", reply):
@@ -190,15 +223,34 @@ class SecurityGuard:
                 "[YETKILI_DEVRET: Müşteri ödeme/kapora/IBAN talebi]"
             )
 
+        # 4. Strict Zero-Emoji Enforcement: Strip all emojis, sparkles and pictographs
+        emoji_pattern = re.compile(
+            "["
+            "\U0001F600-\U0001F64F"  # emoticons
+            "\U0001F300-\U0001F5FF"  # symbols & pictographs
+            "\U0001F680-\U0001F6FF"  # transport & map
+            "\U0001F1E0-\U0001F1FF"  # flags
+            "\U00002700-\U000027BF"  # dingbats (sparkles, checkmarks, etc.)
+            "\U0001F900-\U0001F9FF"  # supplemental symbols (massage, people, etc.)
+            "\U0001FA70-\U0001FAFF"  # symbols and pictographs extended
+            "\U00002600-\U000026FF"  # misc symbols
+            "\U00002B50-\U00002B55"  # stars
+            "]+",
+            flags=re.UNICODE,
+        )
+        reply = emoji_pattern.sub("", reply)
+        reply = re.sub(r"[ \t]+", " ", reply).strip()
+        reply = re.sub(r"\n\s*\n\s*\n+", "\n\n", reply)
+
         return reply
 
     def detect_intervention_intent(self, message: str) -> bool:
-        """Detects severe complaints, emergency legal threats, or consumer accusations requiring immediate human handoff."""
+        """Detects severe complaints, emergency legal threats, or explicit urgent human handoff requests."""
         msg = message.lower().strip()
         patterns = [
-            r"(?i)(şikayet|dolandırıcı|dava\s*aç|savcılık|tüketici\s*hakem|avukat)",
-            r"(?i)(acil\s*yetkili|derhal\s*yetkili|insanla\s*görüş|canlı\s*destek|yetkili\s*birine)",
-            r"(?i)(para\s*iadesi|iade\s*yap|hırsızlık|taciz)",
+            r"(?i)(şikayet|dolandırıcı|dava\s*aç|savcılık|tüketici\s*hakem|avukat|hırsızlık|taciz|para\s*iadesi|iade\s*yap)",
+            r"(?i)(acil\s*yetkili|derhal\s*yetkili|insanla\s*görüş|canlı\s*destek|yetkili\s*birine\s*bağla|yetkiliye\s*bağla)",
+            r"(?i)\b(?:yetkiliyle|biriyle)\s+(?:görüşmek|konuşmak)\s+istiyorum\b",
         ]
         return any(bool(re.search(p, msg)) for p in patterns)
 

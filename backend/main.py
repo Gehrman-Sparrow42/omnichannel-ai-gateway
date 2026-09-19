@@ -23,6 +23,7 @@ import auth
 from auth import require_superadmin, require_branch_access, get_current_user
 from security import (
     security_guard,
+    strip_all_internal_tags,
     login_rate_limiter,
     api_budget_guard,
     endpoint_limiter,
@@ -79,7 +80,7 @@ async def process_flushed_message(
     # 1. Handle special /reset command
     if aggregated_text.strip().lower() == "/reset":
         database.save_message(b_id, chan, c_id, direction="inbound", role="user", content="/reset", customer_name=c_name)
-        reset_reply = "Sohbet geçmişiniz sıfırlandı. Size nasıl yardımcı olabilirim? ✨"
+        reset_reply = "Sohbet geçmişiniz sıfırlandı. Size nasıl yardımcı olabilirim?"
         database.save_message(b_id, chan, c_id, direction="outbound", role="assistant", content=reset_reply)
         if adapter:
             await adapter.send_message(b_id, c_id, reset_reply)
@@ -125,22 +126,21 @@ async def process_flushed_message(
             await adapter.send_message(b_id, c_id, safety_refusal)
         return
 
-    # 5. Intent: Human Intervention / Coordinator Handover Request
-    if security_guard.detect_intervention_intent(clean_text):
-        logger.warning("[INTERVENTION] Human handover intent detected for %s on branch %s.", c_id, b_id)
-        # Mute bot for 2 hours
-        database.set_conversation_mute(b_id, chan, c_id, is_muted=True, hours=2, reason="Müşteri yetkili devralma talep etti")
-        handover_reply = (
-            "Talebinizi aldım! ✨ Şube yetkilimiz konuyu devraldı; "
-            "en kısa sürede sizinle bu sohbet üzerinden doğrudan iletişime geçecektir."
+    # 5a. Direct Payment / Kapora / IBAN inquiry interception
+    payment_patterns = [
+        r"(?i)\b(kapora|iban|hesap\s+no|hesap\s+numara|para\s+gönder|havale|eft|kredi\s+kart|ödemeyi\s+nereye|nereye\s+öde|hesap\s+bilgi|ödemeyi\s+nasıl\s+yap|ödeme\s+yapmak\s+istiyorum)\b"
+    ]
+    if any(bool(re.search(p, clean_text)) for p in payment_patterns):
+        logger.warning("[INTERVENTION] Payment/IBAN inquiry detected for %s on branch %s.", c_id, b_id)
+        database.set_conversation_mute(b_id, chan, c_id, is_muted=True, hours=2, reason="Müşteri ödeme/kapora/IBAN talebinde bulundu")
+        payment_reply = (
+            "Ödeme, kapora ve hesap işlemlerimiz doğrudan şube yetkilimiz tarafından güvenli şekilde "
+            "yürütülmektedir. Yetkilimize bilgi verdim, en kısa sürede sizinle buradan iletişime geçecektir."
         )
         database.save_message(b_id, chan, c_id, direction="inbound", role="user", content=clean_text, customer_name=c_name)
-        database.save_message(b_id, chan, c_id, direction="outbound", role="assistant", content=handover_reply)
-
+        database.save_message(b_id, chan, c_id, direction="outbound", role="assistant", content=payment_reply)
         if adapter:
-            await adapter.send_message(b_id, c_id, handover_reply)
-
-        # Dispatch urgent loud mobile push alarm via ntfy.sh
+            await adapter.send_message(b_id, c_id, payment_reply)
         branch_info = config.get_branch_by_id(b_id)
         branch_name = branch_info["name"] if branch_info else b_id
         asyncio.create_task(
@@ -155,15 +155,23 @@ async def process_flushed_message(
         )
         return
 
-    # 6. Intent: Reservation / Booking Lead Detection
-    is_res_lead = security_guard.detect_reservation_intent(clean_text)
-    if is_res_lead:
-        logger.info("[LEAD] Booking intent detected for %s on branch %s.", c_id, b_id)
-        database.set_conversation_lead(b_id, chan, c_id, is_lead=True, lead_details=f"Talep: {clean_text[:100]}")
+    # 5b. Intent: Critical Human Intervention / Severe Complaint
+    if security_guard.detect_intervention_intent(clean_text):
+        logger.warning("[INTERVENTION] Critical handover intent detected for %s on branch %s.", c_id, b_id)
+        database.set_conversation_mute(b_id, chan, c_id, is_muted=True, hours=2, reason="Müşteri acil yetkili / şikayet devri talep etti")
+        handover_reply = (
+            "Talebinizi aldım, konuyu şube yetkilimize iletiyorum. "
+            "En kısa sürede sizinle bu sohbet üzerinden doğrudan iletişime geçilecektir."
+        )
+        database.save_message(b_id, chan, c_id, direction="inbound", role="user", content=clean_text, customer_name=c_name)
+        database.save_message(b_id, chan, c_id, direction="outbound", role="assistant", content=handover_reply)
+        if adapter:
+            await adapter.send_message(b_id, c_id, handover_reply)
+
         branch_info = config.get_branch_by_id(b_id)
         branch_name = branch_info["name"] if branch_info else b_id
         asyncio.create_task(
-            notifier.send_reservation_lead_alert(
+            notifier.send_intervention_alert(
                 branch_id=b_id,
                 channel=chan,
                 customer_id=c_id,
@@ -172,25 +180,97 @@ async def process_flushed_message(
                 branch_name=branch_name,
             )
         )
+        return
 
-    # 7. Query AI LLM Engine with Branch Knowledge & History
+    # 6. Query AI LLM Engine with Branch Knowledge & History
     past_history = database.get_history(b_id, chan, c_id, limit=8)
 
     try:
-        raw_reply = await llm_router.query_llm_for_branch(b_id, clean_text, past_history)
-        sanitized_reply = security_guard.sanitize_output(raw_reply)
+        raw_reply = await llm_router.query_llm_for_branch(b_id, clean_text, past_history, channel=chan)
     except Exception as exc:
         logger.exception("Error during LLM query for branch %s: %s", b_id, exc)
-        sanitized_reply = (
-            "Değerli misafirimiz, şu anda mesajınızı yanıtlarken geçici bir yoğunluk oluştu. "
-            "Şube yetkilimiz en kısa sürede bu sohbet üzerinden sizinle iletişime geçecektir. ✨"
+        raw_reply = (
+            "Değerli misafirimiz, şu anda mesajınızı yanıtlarken kısa bir sistem gecikmesi oluştu. "
+            "Şube yetkilimiz en kısa sürede bu sohbet üzerinden sizinle iletişime geçecektir."
         )
 
-    # 8. Save Assistant Reply & Dispatch Outbound via Channel Adapter
-    database.save_message(b_id, chan, c_id, direction="outbound", role="assistant", content=sanitized_reply)
-    append_audit_log_file(recipient_jid=f"{chan}:{c_id}", message_preview=sanitized_reply, status="SENT")
+    # 7. Check for interactive action tags & reservation lead completion (Camp Bot Pattern)
+    intervention_match = re.search(
+        r"\[\s*(?:YETKILI_DEVRET|YETKILI_TALEBI|INSAN_DEVRAL)(?::\s*([\s\S]*?))?\s*\]",
+        raw_reply,
+        re.IGNORECASE,
+    )
+    lead_match = re.search(
+        r"\[\s*(?:REZERVASYON_BILGILERI_TAMAM|REZERVASYON_TAMAM|REZERVASYON_BILGISI|REZERVASYON|LEAD_TAMAM|LEAD)(?::\s*([\s\S]*?))?\s*\]",
+        raw_reply,
+        re.IGNORECASE,
+    )
+
+    # Semantic reservation lead fallback (Camp Bot Pattern)
+    is_semantic_lead = False
+    semantic_lead_details = ""
+    if not lead_match and not intervention_match:
+        reply_lower = raw_reply.lower()
+        semantic_promise_patterns = [
+            r"müsaitli.*kontrol\s+edip.*(dönüş|haber|iletiş|bilgi)",
+            r"kesin\s+randevu\s+teyidi.*(dönüş|iletiş|bilgi|şube)",
+            r"randevu\s+talebinizi\s+ve\s+detaylarınızı\s+aldım",
+            r"(kısa\s+bir\s+süre\s+içinde|birazdan).*buradan\s+dönüş",
+            r"seansınızı\s+planlayalım.*müsaitli",
+        ]
+        user_lower = clean_text.lower()
+        has_user_details = any(k in user_lower for k in ["saat", "gün", "yarın", "kişi", "adım", "pazartesi", "salı", "çarşamba", "perşembe", "cuma", "cumartesi", "pazar"])
+        if has_user_details and any(re.search(p, reply_lower) for p in semantic_promise_patterns):
+            is_semantic_lead = True
+            semantic_lead_details = f"Rezervasyon (Semantik Teyit): {clean_text[:100]}"
+
+    branch_info = config.get_branch_by_id(b_id)
+    branch_name = branch_info["name"] if branch_info else b_id
+
+    # Priority 1: Human intervention tag from LLM
+    if intervention_match:
+        reason = (intervention_match.group(1) or "").strip() or "Müşteri yetkili devri talep etti"
+        logger.info("[INTERVENTION] Human handover tag detected for %s: %s", c_id, reason)
+        database.set_conversation_mute(b_id, chan, c_id, is_muted=True, hours=2, reason=reason)
+        asyncio.create_task(
+            notifier.send_intervention_alert(
+                branch_id=b_id,
+                channel=chan,
+                customer_id=c_id,
+                customer_name=c_name,
+                user_message=clean_text,
+                branch_name=branch_name,
+            )
+        )
+        system_monitor.add_system_log("warning", "Yetkili Müdahalesi", f"{branch_name}: {reason}", b_id, chan)
+
+    # Priority 2: Reservation completed tag or semantic booking confirmation
+    elif lead_match or is_semantic_lead:
+        lead_details_str = (lead_match.group(1).strip() if (lead_match and lead_match.group(1)) else None) or semantic_lead_details or f"Rezervasyon: {clean_text[:100]}"
+        logger.info("[LEAD] Reservation completed tag detected for %s: %s", c_id, lead_details_str)
+        database.set_conversation_lead(b_id, chan, c_id, is_lead=True, lead_details=lead_details_str)
+        database.set_conversation_mute(b_id, chan, c_id, is_muted=True, hours=2, reason=f"Rezervasyon bilgileri tamamlandı: {lead_details_str[:60]}")
+        asyncio.create_task(
+            notifier.send_reservation_lead_alert(
+                branch_id=b_id,
+                channel=chan,
+                customer_id=c_id,
+                customer_name=c_name,
+                user_message=f"{clean_text} | {lead_details_str}",
+                branch_name=branch_name,
+            )
+        )
+        system_monitor.add_system_log("info", "Rezervasyon Talebi Tamamlandı", f"{branch_name}: {lead_details_str}", b_id, chan)
+
+    # 8. Clean, sanitize and strip ANY internal system/routing tags so user never sees them
+    sanitized_reply = security_guard.sanitize_output(raw_reply)
+    clean_customer_reply = strip_all_internal_tags(sanitized_reply)
+
+    # 9. Save Assistant Reply & Dispatch Outbound via Channel Adapter
+    database.save_message(b_id, chan, c_id, direction="outbound", role="assistant", content=clean_customer_reply)
+    append_audit_log_file(recipient_jid=f"{chan}:{c_id}", message_preview=clean_customer_reply, status="SENT")
     if adapter:
-        await adapter.send_message(b_id, c_id, sanitized_reply)
+        await adapter.send_message(b_id, c_id, clean_customer_reply)
 
 
 BRIDGE_DIR = Path(__file__).resolve().parent.parent / "bridge"
@@ -896,11 +976,11 @@ async def api_demo_seed(
 
     results = []
     for sc in DEMO_PRESETS_DATA:
-        b_id: str = str(sc["branch_id"])
-        chan: str = str(sc["channel"])
-        c_id: str = str(sc["customer_id"])
-        c_name: str = str(sc["customer_name"])
-        text: str = str(sc["message"])
+        b_id: str = sc["branch_id"]
+        chan: str = sc["channel"]
+        c_id: str = sc["customer_id"]
+        c_name: str = sc["customer_name"]
+        text: str = sc["message"]
 
         # 1. Save user inbound message
         database.save_message(
@@ -915,7 +995,7 @@ async def api_demo_seed(
         )
 
         # 2. Check reservation lead intent
-        is_res_lead = security_guard.detect_reservation_intent(text) or bool(sc.get("is_lead", False))
+        is_res_lead = security_guard.detect_reservation_intent(text) or sc.get("is_lead", False)
         if is_res_lead:
             lead_details_val: Optional[str] = sc.get("lead_details")
             lead_info_str: str = lead_details_val if lead_details_val else f"Talep: {text[:100]}"
@@ -929,11 +1009,11 @@ async def api_demo_seed(
 
         # 3. Query LLM
         try:
-            raw_reply = await llm_router.query_llm_for_branch(b_id, text, [])
-            sanitized_reply = security_guard.sanitize_output(raw_reply)
+            raw_reply = await llm_router.query_llm_for_branch(b_id, text, [], channel=chan)
+            sanitized_reply = strip_all_internal_tags(security_guard.sanitize_output(raw_reply))
         except Exception as exc:
             logger.exception("LLM generation error during demo seed for %s: %s", b_id, exc)
-            sanitized_reply = "Değerli misafirimiz, Navitas Spa olarak size yardımcı olmaktan mutluluk duyarız. Randevu ve detaylı bilgi için bize her zaman ulaşabilirsiniz. ✨"
+            sanitized_reply = "Değerli misafirimiz, Navitas Spa olarak size yardımcı olmaktan memnuniyet duyarız. Randevu ve detaylı bilgi için bize her zaman ulaşabilirsiniz."
 
         # 4. Save AI assistant reply
         database.save_message(

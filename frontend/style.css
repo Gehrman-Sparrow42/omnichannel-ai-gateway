@@ -117,101 +117,154 @@ body {
 /* =========================================================
    Top Navigation Bar (High Density, Zero Wrap)
    ========================================================= */
+/* =========================================================
+   Top Navigation Bar (Sleek 3-Column Balanced Layout)
+   ========================================================= */
 .top-nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(16, 28, 46, 0.92);
+  background: rgba(16, 28, 46, 0.95);
   border: 1px solid var(--border-subtle);
   padding: 8px 16px;
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
-  gap: 12px;
+  gap: 14px;
   min-height: 56px;
+  position: relative;
+  z-index: 100;
+}
+
+.nav-group-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.nav-group-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.nav-group-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.nav-v-divider {
+  width: 1px;
+  height: 24px;
+  background: rgba(201, 211, 232, 0.14);
+  flex-shrink: 0;
+}
+
+.nav-v-divider-sm {
+  width: 1px;
+  height: 18px;
+  background: rgba(201, 211, 232, 0.12);
+  flex-shrink: 0;
 }
 
 .brand-section {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-shrink: 0;
 }
 
 .brand-logo {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   background: linear-gradient(135deg, #2e729a, #22314f);
   border-radius: var(--radius-sm);
-  font-size: 18px;
+  font-size: 16px;
   color: #fff;
   box-shadow: 0 0 16px rgba(46, 114, 154, 0.45);
   border: 1px solid rgba(201, 211, 232, 0.25);
+  flex-shrink: 0;
 }
 
 .brand-title {
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  line-height: 1.2;
 }
 
 .brand-title h1 {
-  font-size: 14.5px;
+  font-size: 13.5px;
   font-weight: 700;
   letter-spacing: -0.01em;
   color: var(--text-primary);
   display: flex;
   align-items: center;
   gap: 6px;
+  white-space: nowrap;
 }
 
 .brand-badge {
-  background: rgba(46, 114, 154, 0.22);
+  background: rgba(46, 114, 154, 0.25);
   color: #c9d3e8;
   border: 1px solid rgba(46, 114, 154, 0.45);
-  font-size: 10px;
+  font-size: 9.5px;
   font-weight: 700;
-  padding: 1px 6px;
+  padding: 1px 5px;
   border-radius: 4px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .brand-title span {
-  font-size: 11px;
+  font-size: 10.5px;
   color: var(--text-secondary);
+  white-space: nowrap;
 }
 
 /* Branch Switcher Dropdown */
 .branch-switcher-container {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   background: rgba(24, 40, 64, 0.7);
   border: 1px solid var(--border-subtle);
-  padding: 4px 12px;
+  padding: 4px 10px;
   border-radius: var(--radius-sm);
+  height: 34px;
+  flex-shrink: 0;
 }
 
 .branch-switcher-container label {
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 700;
   color: #94a3b8;
   text-transform: uppercase;
   letter-spacing: 0.04em;
+  white-space: nowrap;
 }
 
 .branch-select {
   background: transparent;
   color: var(--text-primary);
   border: none;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 600;
   outline: none;
   cursor: pointer;
-  padding: 4px;
+  padding: 2px 4px;
+  max-width: 175px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .branch-select option {
@@ -223,11 +276,12 @@ body {
 .nav-tabs {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
   background: rgba(10, 17, 30, 0.85);
   border: 1px solid var(--border-subtle);
-  padding: 4px;
+  padding: 3px;
   border-radius: var(--radius-sm);
+  height: 38px;
 }
 
 .nav-tab-btn {
@@ -236,13 +290,15 @@ body {
   border: none;
   padding: 6px 12px;
   border-radius: 6px;
-  font-size: 12.5px;
+  font-size: 12px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s ease;
   display: flex;
   align-items: center;
   gap: 6px;
+  white-space: nowrap;
+  height: 30px;
 }
 
 .nav-tab-btn:hover {
@@ -261,7 +317,8 @@ body {
 .nav-metrics {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
+  flex-shrink: 0;
 }
 
 .metric-chip {
@@ -270,11 +327,13 @@ body {
   gap: 5px;
   background: rgba(24, 40, 64, 0.7);
   border: 1px solid var(--border-subtle);
-  padding: 4px 10px;
+  padding: 3px 8px;
   border-radius: var(--radius-full);
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--text-primary);
+  height: 28px;
+  white-space: nowrap;
 }
 
 .metric-chip.metric-lead {
@@ -294,20 +353,35 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
+  flex-shrink: 0;
 }
 
 .status-pill {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   font-size: 11px;
   font-weight: 600;
-  padding: 4px 10px;
+  padding: 3px 8px;
   border-radius: var(--radius-full);
   border: 1px solid var(--border-subtle);
   background: rgba(24, 40, 64, 0.6);
   color: var(--text-secondary);
   cursor: default;
+  height: 28px;
+  white-space: nowrap;
+}
+
+.status-pill.offline {
+  background: rgba(241, 92, 109, 0.12);
+  color: #fca5a5;
+  border-color: rgba(241, 92, 109, 0.25);
+  cursor: pointer;
+}
+
+.status-pill.offline:hover {
+  background: rgba(241, 92, 109, 0.22);
+  border-color: rgba(241, 92, 109, 0.45);
 }
 
 .status-pill.online {
@@ -342,8 +416,9 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  font-size: 13px;
+  font-size: 12.5px;
   transition: all 0.15s ease;
+  flex-shrink: 0;
 }
 
 .nav-btn:hover {
@@ -353,10 +428,10 @@ body {
 
 .nav-btn.btn-sim {
   width: auto;
-  padding: 0 10px;
+  padding: 0 9px;
   gap: 5px;
   font-weight: 600;
-  font-size: 11.5px;
+  font-size: 11px;
   background: rgba(46, 114, 154, 0.2);
   color: #c9d3e8;
   border-color: rgba(46, 114, 154, 0.4);
@@ -369,10 +444,10 @@ body {
 
 .nav-btn.btn-demo-magic {
   width: auto;
-  padding: 0 12px;
-  gap: 6px;
+  padding: 0 10px;
+  gap: 5px;
   font-weight: 700;
-  font-size: 11.5px;
+  font-size: 11px;
   background: linear-gradient(135deg, rgba(46, 114, 154, 0.45) 0%, rgba(201, 211, 232, 0.22) 100%);
   color: #f5f2ea;
   border: 1px solid rgba(201, 211, 232, 0.5);
@@ -402,7 +477,6 @@ body {
   }
 }
 
-
 .nav-btn.btn-danger {
   color: var(--danger);
 }
@@ -420,7 +494,10 @@ body {
   border: 1px solid var(--border-subtle);
   padding: 3px 8px;
   border-radius: var(--radius-full);
-  font-size: 11.5px;
+  font-size: 11px;
+  height: 30px;
+  max-width: 170px;
+  flex-shrink: 0;
 }
 
 .user-avatar-sm {
@@ -434,6 +511,79 @@ body {
   justify-content: center;
   font-size: 10px;
   font-weight: 700;
+  flex-shrink: 0;
+}
+
+#userDisplayName {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 115px;
+  font-weight: 600;
+  font-size: 11px;
+  color: var(--text-primary);
+}
+
+/* Responsive Top Navigation Breakpoints */
+@media (max-width: 1550px) {
+  .brand-title span {
+    display: none;
+  }
+  .branch-select {
+    max-width: 145px;
+  }
+  .status-pill#pill-model {
+    display: none;
+  }
+}
+
+@media (max-width: 1380px) {
+  .nav-tab-btn {
+    padding: 5px 8px;
+    font-size: 11.5px;
+    gap: 4px;
+  }
+  .btn-demo-magic span,
+  .btn-sim span {
+    display: none;
+  }
+  .btn-demo-magic,
+  .btn-sim {
+    width: 32px !important;
+    padding: 0 !important;
+    justify-content: center;
+  }
+  #userDisplayName {
+    max-width: 80px;
+  }
+}
+
+@media (max-width: 1220px) {
+  .nav-metrics {
+    display: none;
+  }
+  .branch-switcher-container label {
+    display: none;
+  }
+  .brand-title h1 {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 1050px) {
+  .nav-tab-btn span {
+    display: none;
+  }
+  .nav-tab-btn {
+    padding: 6px 10px;
+  }
+  #waStatusText,
+  #systemStatusText {
+    display: none;
+  }
+  .status-pill {
+    padding: 4px 6px;
+  }
 }
 
 /* =========================================================
