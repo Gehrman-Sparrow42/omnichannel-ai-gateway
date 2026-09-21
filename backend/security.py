@@ -203,12 +203,7 @@ class SecurityGuard:
 
         reply = assistant_reply.strip()
 
-        # 1. Detect CJK/Chinese foreign token leakage from base model
-        if re.search(r"[\u4e00-\u9fff]", reply):
-            logger.warning("Sanitizer caught foreign characters in reply. Overriding with clean response.")
-            return "Size nasıl yardımcı olabilirim? Masaj, hamam veya spa randevunuzla ilgili bilgi alabilirsiniz."
-
-        # 2. Intercept code block leakage
+        # 1. Intercept code block leakage
         if re.search(r"```(python|javascript|html|css|json|sql|bash|sh)", reply):
             logger.warning("Sanitizer caught code block in output. Overriding with scope refusal.")
             return REFUSAL_OFFTOPIC
