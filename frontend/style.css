@@ -1609,6 +1609,44 @@ body {
   margin: 6px 0;
 }
 
+/* Settings Tools & Diagnostics */
+.settings-tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.btn-tool-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  background: rgba(24, 40, 64, 0.85);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-tool-action:hover {
+  background: var(--bg-surface-hover);
+  border-color: rgba(46, 114, 154, 0.6);
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(46, 114, 154, 0.3);
+  transform: translateY(-1px);
+}
+
+.btn-tool-action i {
+  font-size: 13px;
+  color: #38bdf8;
+}
+
 .diagnostics-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -2342,78 +2380,36 @@ body {
    RESPONSIVE DESIGN SYSTEM: DESKTOP, TABLET & MOBILE
    ========================================================= */
 
-/* =========================================================
-   RESPONSIVE DESIGN SYSTEM: DESKTOP, TABLET & MOBILE
-   ========================================================= */
-
-/* Large Desktop / Standard 1080p (<= 1720px) */
-@media (max-width: 1720px) {
-  .brand-title span {
+/* Medium Desktop / Laptops (<= 1400px) */
+@media (max-width: 1400px) {
+  .branch-switcher-container label {
     display: none;
   }
-  #seedDemoNavBtn span,
-  #openSimulatorBtn span {
-    display: none;
-  }
-  #seedDemoNavBtn,
-  #openSimulatorBtn {
-    padding: 0 8px;
+  .branch-select {
+    max-width: 135px;
   }
   #waStatusText {
-    max-width: 120px;
+    max-width: 100px;
     overflow: hidden;
     text-overflow: ellipsis;
   }
   .user-badge {
-    max-width: 130px;
-  }
-  .branch-select {
-    max-width: 150px;
-  }
-}
-
-/* Medium Desktop / 1080p 125% DPI / Laptops (<= 1520px) */
-@media (max-width: 1520px) {
-  #pill-model {
-    display: none !important;
-  }
-  .metric-chip.metric-muted {
-    display: none;
-  }
-  .branch-switcher-container label {
-    display: none;
-  }
-  .brand-title h1 {
-    font-size: 12.5px;
-  }
-  .brand-badge {
-    display: none;
+    max-width: 110px;
   }
   .nav-tab-btn {
-    padding: 4px 7px;
+    padding: 5px 8px;
     font-size: 11px;
     gap: 4px;
   }
-  .top-nav {
-    padding: 6px 10px;
-    gap: 8px;
-  }
 }
 
-/* Standard Laptops & Compact Desktops (<= 1350px) */
-@media (max-width: 1350px) {
-  .nav-metrics {
-    display: none !important;
-  }
+/* Compact Laptops & Small Desktops (<= 1200px) */
+@media (max-width: 1200px) {
   #systemStatusText {
     display: none;
   }
   #waStatusText {
     display: none;
-  }
-  #pill-whatsapp,
-  #pill-backend {
-    padding: 3px 6px;
   }
   #userDisplayName {
     display: none;
@@ -2425,6 +2421,27 @@ body {
   }
   .inbox-sidebar {
     width: 320px;
+  }
+  .kpi-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Tablet & Compact Displays (<= 1050px) */
+@media (max-width: 1050px) {
+  .nav-tab-btn span {
+    display: none;
+  }
+  .nav-tab-btn {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+  .branch-select {
+    max-width: 115px;
+    font-size: 11px;
+  }
+  .settings-grid {
+    grid-template-columns: 1fr 1fr;
   }
 }
 

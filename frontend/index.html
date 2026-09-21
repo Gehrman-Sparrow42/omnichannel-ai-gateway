@@ -27,11 +27,7 @@
             <i class="fa-solid fa-spa"></i>
           </div>
           <div class="brand-title">
-            <h1>
-              NAVITAS SPA & WELLNESS
-              <span class="brand-badge">17 Merkez</span>
-            </h1>
-            <span>4 Kanal Unified Control Hub</span>
+            <h1>NAVITAS SPA</h1>
           </div>
         </div>
 
@@ -40,7 +36,7 @@
         <div class="branch-switcher-container">
           <label for="branchSelect">Şube:</label>
           <select id="branchSelect" class="branch-select" title="Aktif Şube Seçimi">
-            <option value="all">🌐 Tüm Şubeler (Global Bird's-Eye)</option>
+            <option value="all">🌐 Tüm Şubeler</option>
             <!-- 19 branches populated dynamically -->
           </select>
         </div>
@@ -67,24 +63,8 @@
         </nav>
       </div>
 
-      <!-- Right Group: Metrics, Status Indicators & Actions -->
+      <!-- Right Group: Status Indicators & Quick Actions -->
       <div class="nav-group-right">
-        <!-- Live Metric Chips -->
-        <div class="nav-metrics">
-          <div class="metric-chip" title="Toplam sohbet oturumu">
-            <i class="fa-solid fa-comments"></i> <span id="stat-chats-count">0</span>
-          </div>
-          <div class="metric-chip metric-lead" title="Rezervasyon adayı müşteriler">
-            <i class="fa-solid fa-star"></i> <span id="stat-leads-count">0</span>
-          </div>
-          <div class="metric-chip metric-muted" title="Susturulan / Temsilciye devredilen sohbetler">
-            <i class="fa-solid fa-microphone-slash"></i> <span id="stat-muted-count">0</span>
-          </div>
-        </div>
-
-        <div class="nav-v-divider"></div>
-
-        <!-- Status Indicators & Quick Launchers -->
         <div class="service-indicators">
           <!-- WhatsApp Session Status Pill -->
           <div class="status-pill offline" id="pill-whatsapp" onclick="openWhatsAppModal()" title="WhatsApp Web Oturum Yönetimi (Tıkla ve Bağla)">
@@ -97,27 +77,6 @@
             <div class="status-dot"></div>
             <span id="systemStatusText">API Aktif</span>
           </div>
-
-          <!-- Active Model Pill -->
-          <div class="status-pill online" id="pill-model" title="Aktif Yapay Zeka Modeli">
-            <i class="fa-solid fa-brain"></i>
-            <span id="activeModelBadge">gpt-4o-mini</span>
-          </div>
-
-          <!-- 1-Click Multi-Branch Demo Loader -->
-          <button class="nav-btn btn-demo-magic" id="seedDemoNavBtn" title="5 Farklı Lokasyon ve 4 Dilde Canlı Demo Sohbetlerini Yükle">
-            <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Demo Yükle</span>
-          </button>
-
-          <!-- Test Simulator Launcher -->
-          <button class="nav-btn btn-sim" id="openSimulatorBtn" title="Gelen Mesaj Test Simülatörü">
-            <i class="fa-solid fa-vial"></i> <span>Simülatör</span>
-          </button>
-
-          <!-- Test Mobile Push Alert -->
-          <button class="nav-btn" id="sendTestAlertBtn" title="ntfy.sh Mobil Push Alarmını Test Et">
-            <i class="fa-solid fa-bell"></i>
-          </button>
 
           <div class="nav-v-divider-sm"></div>
 
@@ -514,13 +473,30 @@
               </button>
             </div>
 
+            <!-- Test & Demo Management Tools -->
+            <div class="section-card">
+              <h3><i class="fa-solid fa-toolbox"></i> Test & Demo Yönetimi</h3>
+              <p class="conv-snippet">Geliştirici ve yönetici test araçları, simülasyon ve mobil alarm testleri:</p>
+              <div class="settings-tools-grid">
+                <button type="button" class="btn-tool-action" id="seedDemoNavBtn" title="5 Farklı Lokasyon ve 4 Dilde Canlı Demo Sohbetlerini Yükle">
+                  <i class="fa-solid fa-wand-magic-sparkles"></i> <span>Canlı Demo Sohbetlerini Yükle</span>
+                </button>
+                <button type="button" class="btn-tool-action" id="openSimulatorBtn" title="Gelen Mesaj Test Simülatörü">
+                  <i class="fa-solid fa-vial"></i> <span>Mesaj Test Simülatörü</span>
+                </button>
+                <button type="button" class="btn-tool-action" id="sendTestAlertBtn" title="ntfy.sh Mobil Push Alarmını Test Et">
+                  <i class="fa-solid fa-bell"></i> <span>Mobil Push Alarmı Test Et</span>
+                </button>
+              </div>
+            </div>
+
             <!-- AI Engine Diagnostics & Anti-Hallucination Info -->
             <div class="section-card">
               <h3><i class="fa-solid fa-circle-info"></i> Yapay Zeka Teşhis & Güvenlik Kalkanı</h3>
               <div class="diagnostics-grid">
                 <div class="diag-item">
                   <span class="diag-label">Aktif Model:</span>
-                  <strong class="diag-val" id="diagModel">gpt-4o-mini</strong>
+                  <strong class="diag-val" id="diagModel"><span id="activeModelBadge">gpt-4o-mini</span></strong>
                 </div>
                 <div class="diag-item">
                   <span class="diag-label">Sağlayıcı:</span>
