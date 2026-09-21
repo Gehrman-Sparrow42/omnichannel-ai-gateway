@@ -9,6 +9,25 @@ from adapters.base import BaseChannelAdapter, UniversalMessage
 logger = logging.getLogger("omni-adapter-whatsapp")
 
 
+def format_whatsapp_markdown(text: str) -> str:
+    """
+    Converts standard Markdown formatting into WhatsApp-native formatting.
+    In WhatsApp:
+      - Bold is single asterisk: *text* (Markdown **text** causes an extra asterisk to spill over).
+      - Headers (### Header) are converted to clean bold: *Header*.
+    """
+    if not text:
+        return text
+
+    # 1. Convert ***bold italic*** to *bold italic*
+    res = re.sub(r"\*\*\*\s*([^\*]+?)\s*\*\*\*", r"*\1*", text)
+    # 2. Convert **bold** to *bold* (ensures no stray whitespace inside asterisks)
+    res = re.sub(r"\*\*\s*([^\*]+?)\s*\*\*", r"*\1*", res)
+    # 3. Clean Markdown headers (e.g. ### Header -> *Header*)
+    res = re.sub(r"(?m)^#{1,4}\s+(.+)$", r"*\1*", res)
+    return res
+
+
 class WhatsAppAdapter(BaseChannelAdapter):
     """
     Adapter for WhatsApp supporting both:
@@ -108,7 +127,9 @@ class WhatsAppAdapter(BaseChannelAdapter):
     ) -> bool:
         """
         Dispatches outbound WhatsApp message via Meta Cloud API or local Bridge.
+        Automatically converts standard Markdown (**bold**) to WhatsApp bold (*bold*).
         """
+        formatted_text = format_whatsapp_markdown(text)
         clean_phone = re.sub(r"[^\d]", "", customer_id)
 
         # 1. Try Meta Cloud API if token & phone ID configured
@@ -123,7 +144,7 @@ class WhatsAppAdapter(BaseChannelAdapter):
                 "recipient_type": "individual",
                 "to": clean_phone,
                 "type": "text",
-                "text": {"preview_url": False, "body": text},
+                "text": {"preview_url": False, "body": formatted_text},
             }
             try:
                 async with httpx.AsyncClient(timeout=10.0) as client:
@@ -149,7 +170,7 @@ class WhatsAppAdapter(BaseChannelAdapter):
             async with httpx.AsyncClient(timeout=15.0) as client:
                 resp = await client.post(
                     bridge_url,
-                    json={"chatId": chat_id, "message": text},
+                    json={"chatId": chat_id, "message": formatted_text},
                 )
                 if resp.status_code == 200:
                     logger.info("[WHATSAPP] Bridge successfully delivered message to %s", chat_id)

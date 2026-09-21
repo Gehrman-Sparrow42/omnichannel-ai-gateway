@@ -266,6 +266,9 @@ async def process_flushed_message(
     # 8. Clean, sanitize and strip ANY internal system/routing tags so user never sees them
     sanitized_reply = security_guard.sanitize_output(raw_reply)
     clean_customer_reply = strip_all_internal_tags(sanitized_reply)
+    if chan == "whatsapp":
+        from adapters.whatsapp import format_whatsapp_markdown
+        clean_customer_reply = format_whatsapp_markdown(clean_customer_reply)
 
     # 9. Save Assistant Reply & Dispatch Outbound via Channel Adapter
     database.save_message(b_id, chan, c_id, direction="outbound", role="assistant", content=clean_customer_reply)
