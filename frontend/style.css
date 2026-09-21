@@ -126,21 +126,22 @@ body {
   align-items: center;
   background: rgba(16, 28, 46, 0.95);
   border: 1px solid var(--border-subtle);
-  padding: 8px 16px;
+  padding: 6px 14px;
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   -webkit-backdrop-filter: blur(16px);
   backdrop-filter: blur(16px);
-  gap: 14px;
-  min-height: 56px;
+  gap: 10px;
+  min-height: 52px;
   position: relative;
   z-index: 100;
+  flex-wrap: nowrap;
 }
 
 .nav-group-left {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   flex-shrink: 0;
 }
 
@@ -148,14 +149,14 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 1;
+  flex: 1 1 auto;
   min-width: 0;
 }
 
 .nav-group-right {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex-shrink: 0;
 }
 
@@ -276,29 +277,30 @@ body {
 .nav-tabs {
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: 2px;
   background: rgba(10, 17, 30, 0.85);
   border: 1px solid var(--border-subtle);
-  padding: 3px;
+  padding: 2px;
   border-radius: var(--radius-sm);
-  height: 38px;
+  height: 36px;
+  flex-shrink: 0;
 }
 
 .nav-tab-btn {
   background: transparent;
   color: var(--text-secondary);
   border: none;
-  padding: 6px 12px;
+  padding: 5px 9px;
   border-radius: 6px;
-  font-size: 12px;
+  font-size: 11.5px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s ease;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   white-space: nowrap;
-  height: 30px;
+  height: 28px;
 }
 
 .nav-tab-btn:hover {
@@ -2340,43 +2342,124 @@ body {
    RESPONSIVE DESIGN SYSTEM: DESKTOP, TABLET & MOBILE
    ========================================================= */
 
-/* Medium / Laptop Screens (<= 1200px) */
-@media (max-width: 1200px) {
-  .nav-metrics {
+/* =========================================================
+   RESPONSIVE DESIGN SYSTEM: DESKTOP, TABLET & MOBILE
+   ========================================================= */
+
+/* Large Desktop / Standard 1080p (<= 1720px) */
+@media (max-width: 1720px) {
+  .brand-title span {
     display: none;
+  }
+  #seedDemoNavBtn span,
+  #openSimulatorBtn span {
+    display: none;
+  }
+  #seedDemoNavBtn,
+  #openSimulatorBtn {
+    padding: 0 8px;
+  }
+  #waStatusText {
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .user-badge {
+    max-width: 130px;
+  }
+  .branch-select {
+    max-width: 150px;
+  }
+}
+
+/* Medium Desktop / 1080p 125% DPI / Laptops (<= 1520px) */
+@media (max-width: 1520px) {
+  #pill-model {
+    display: none !important;
+  }
+  .metric-chip.metric-muted {
+    display: none;
+  }
+  .branch-switcher-container label {
+    display: none;
+  }
+  .brand-title h1 {
+    font-size: 12.5px;
+  }
+  .brand-badge {
+    display: none;
+  }
+  .nav-tab-btn {
+    padding: 4px 7px;
+    font-size: 11px;
+    gap: 4px;
+  }
+  .top-nav {
+    padding: 6px 10px;
+    gap: 8px;
+  }
+}
+
+/* Standard Laptops & Compact Desktops (<= 1350px) */
+@media (max-width: 1350px) {
+  .nav-metrics {
+    display: none !important;
+  }
+  #systemStatusText {
+    display: none;
+  }
+  #waStatusText {
+    display: none;
+  }
+  #pill-whatsapp,
+  #pill-backend {
+    padding: 3px 6px;
+  }
+  #userDisplayName {
+    display: none;
+  }
+  .user-badge {
+    padding: 3px 5px;
+    width: auto;
+    max-width: none;
   }
   .inbox-sidebar {
     width: 320px;
   }
+}
+
+/* Tablet & Compact Displays (<= 1150px) */
+@media (max-width: 1150px) {
+  .nav-tab-btn span {
+    display: none;
+  }
+  .nav-tab-btn {
+    padding: 6px 10px;
+    font-size: 13px;
+  }
+  .branch-select {
+    max-width: 120px;
+  }
   .kpi-grid {
     grid-template-columns: repeat(3, 1fr);
+  }
+  .settings-grid {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
 /* Tablet & Large Mobile (<= 1024px) */
 @media (max-width: 1024px) {
   .top-nav {
-    padding: 8px 12px;
-    gap: 8px;
-  }
-  .brand-title h1 span.brand-badge {
-    display: none;
-  }
-  .brand-title span {
-    display: none;
-  }
-  .branch-switcher-container label {
-    font-size: 11px;
+    padding: 6px 10px;
+    gap: 6px;
   }
   .branch-select {
-    max-width: 160px;
-    font-size: 11.5px;
+    max-width: 115px;
+    font-size: 11px;
   }
-  .nav-tab-btn span {
-    font-size: 11.5px;
-  }
-  .settings-grid {
-    grid-template-columns: 1fr 1fr;
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
