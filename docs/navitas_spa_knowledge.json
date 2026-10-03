@@ -1,0 +1,380 @@
+{
+  "brand": {
+    "name": "Navitas Spa & Wellness",
+    "origin_meaning": "'Navitas', Latincede 'Enerji' demektir. Bedene geri verilen enerjiyi temsil eder.",
+    "slogan": "Ultimate relaxation for your soul",
+    "founded": 1999,
+    "first_spa_opened": 2010,
+    "email": "info@navitasspa.com",
+    "therapist_school": "Endonezya / Bali köklü masaj akademileri mezunu, sertifikalı ve anatomi bilgisi güçlü uzman terapistler.",
+    "general_hours": "09:00 - 22:00 (Haftanın 7 günü açık)"
+  },
+  "branches": [
+    {
+      "id": "istanbul-airport",
+      "name": "İstanbul Havalimanı",
+      "hotel": "Hilton Istanbul Airport",
+      "city": "İstanbul",
+      "address": "İmrahor Mahallesi, Terminal Caddesi No: 13, 34283 Arnavutköy / İstanbul",
+      "phone": "+90 535 814 07 44",
+      "whatsapp": "https://wa.me/905358140744",
+      "email": "info@navitashiltonistairport.com",
+      "status": "active",
+      "hours": "07:00 - 22:00 (Otel misafirlerine fitness 24/7)",
+      "amenities": [
+        "Geleneksel Türk hamamı & göbek taşı",
+        "Isıtmalı kapalı yüzme havuzu",
+        "Fin saunası",
+        "Mozaik buhar odası",
+        "Isıtmalı dinlenme yatakları",
+        "Macera duşları",
+        "3 bakım odası (2 tekli, 1 çift kişilik VIP)",
+        "Tam donanımlı fitness merkezi"
+      ],
+      "notes": "Terminalden birkaç dakika yürüme mesafesinde, kara tarafındadır. Transit uçuşlar için hızlı Focused Care ve Jet Lag paketleri mevcuttur."
+    },
+    {
+      "id": "5-levent",
+      "name": "5. Levent",
+      "hotel": "Levent Çarşı",
+      "city": "İstanbul",
+      "address": "5. Levent, Levent Çarşı, Güzeltepe Mah. 15 Temmuz Şehitler Cad. No:10/1D, Eyüpsultan / İstanbul",
+      "phone": "+90 212 445 19 44",
+      "whatsapp": null,
+      "status": "active",
+      "hours": "09:00 - 22:00"
+    },
+    {
+      "id": "mall-of-istanbul",
+      "name": "Mall of İstanbul",
+      "hotel": "Hilton Mall of İstanbul",
+      "city": "İstanbul",
+      "address": "Ziya Gökalp, Süleyman Demirel Blv. No:7, 34494 Başakşehir / İstanbul",
+      "phone": "+90 212 292 09 44",
+      "whatsapp": null,
+      "status": "active",
+      "hours": "09:00 - 22:00",
+      "amenities": [
+        "Geleneksel Türk hamamı",
+        "Masaj süitleri",
+        "Hydrafacial cilt bakımı",
+        "Fitness merkezi",
+        "Kapalı yüzme havuzu",
+        "VIP Ritüeli süiti",
+        "Gelin hamamı organizasyonu"
+      ]
+    },
+    {
+      "id": "topkapi",
+      "name": "Topkapı",
+      "hotel": "DoubleTree by Hilton Topkapı",
+      "city": "İstanbul",
+      "address": "Orta, Anıt Sokağı No:1, 34040 Bayrampaşa / İstanbul",
+      "phone": "+90 533 071 33 73",
+      "whatsapp": "https://wa.me/905330713373",
+      "status": "active",
+      "hours": "09:00 - 22:00"
+    },
+    {
+      "id": "mahmutbey",
+      "name": "Mahmutbey",
+      "hotel": "Tryp by Wyndham İstanbul Bağcılar",
+      "city": "İstanbul",
+      "address": "Mahmutbey, Ordu Cd. No:13, 34218 Bağcılar / İstanbul",
+      "phone": "+90 212 445 01 44",
+      "whatsapp": null,
+      "status": "active",
+      "hours": "09:00 - 22:00"
+    },
+    {
+      "id": "laleli",
+      "name": "Laleli",
+      "hotel": "Crowne Plaza İstanbul Old City",
+      "city": "İstanbul",
+      "address": "Balabanağa, Fethibey Cd. Laleli, 34134 Fatih / İstanbul",
+      "phone": "+90 530 053 35 24",
+      "whatsapp": "https://wa.me/905300533524",
+      "status": "active",
+      "hours": "09:00 - 22:00"
+    },
+    {
+      "id": "sultanahmet",
+      "name": "Sultanahmet",
+      "hotel": "Hagia Sofia Mansions, Curio Collection by Hilton",
+      "city": "İstanbul",
+      "address": "Sultan Ahmet, Soğuk Çeşme Sk. No:3, 34122 Fatih / İstanbul",
+      "phone": "+90 530 047 52 44",
+      "whatsapp": "https://wa.me/905300475244",
+      "status": "renovation",
+      "notes": "Spa alanı şu anda tadilattadır."
+    },
+    {
+      "id": "halkali",
+      "name": "Halkalı",
+      "hotel": "Delta Hotels by Marriott İstanbul Halkalı",
+      "city": "İstanbul",
+      "address": "Basın Ekspres Cd., Halkalı Caddesi No:2, 34303 Halkalı / İstanbul",
+      "phone": "+90 212 692 00 43",
+      "whatsapp": null,
+      "status": "active",
+      "hours": "09:00 - 22:00"
+    },
+    {
+      "id": "cerkezkoy",
+      "name": "Çerkezköy",
+      "hotel": "Hawthorn Suites by Wyndham Çerkezköy",
+      "city": "Tekirdağ",
+      "address": "Hawthorn Suites by Wyndham Çerkezköy, Tekirdağ",
+      "phone": "+90 530 053 35 28",
+      "whatsapp": "https://wa.me/905300533528",
+      "status": "active",
+      "hours": "09:00 - 22:00"
+    },
+    {
+      "id": "topuk-yaylasi",
+      "name": "Topuk Yaylası",
+      "hotel": "Fenerbahçe Topuk Yaylası Resort",
+      "city": "Düzce",
+      "address": "Orta, 81900 Hacıazizler / Kaynaşlı / Düzce",
+      "phone": "+90 530 607 52 44",
+      "whatsapp": "https://wa.me/905306075244",
+      "status": "active",
+      "hours": "09:00 - 22:00"
+    },
+    {
+      "id": "ankara-hilton",
+      "name": "Ankara Hilton",
+      "hotel": "Ankara HiltonSA",
+      "city": "Ankara",
+      "address": "Kavaklıdere, Tahran Cd. No:12, 06700 Çankaya / Ankara",
+      "phone": "+90 312 455 00 00",
+      "whatsapp": null,
+      "status": "active",
+      "hours": "09:00 - 22:00",
+      "amenities": [
+        "Cam kubbeli kapalı yüzme havuzu",
+        "Beyaz mermer göbek taşlı Türk hamamı",
+        "Finlandiya saunası",
+        "Buhar odası",
+        "Masaj süiti & tekli/çift odalar",
+        "Fitness merkezi",
+        "Health Club terası"
+      ]
+    },
+    {
+      "id": "ankara-sheraton",
+      "name": "Ankara Sheraton",
+      "hotel": "Sheraton Ankara Hotel & Convention Center",
+      "city": "Ankara",
+      "address": "Gaziosmanpaşa, Şht. Ömer Haluk Sipahioğlu Sk., 06700 Çankaya / Ankara",
+      "phone": "+90 312 457 60 00",
+      "whatsapp": null,
+      "status": "active",
+      "hours": "09:00 - 22:00"
+    },
+    {
+      "id": "marmaris-lumira",
+      "name": "Marmaris Lumira",
+      "hotel": "Sinpaş Kızılbük Thermal Wellness Resort",
+      "city": "Muğla",
+      "address": "Sinpaş Kızılbük Thermal Wellness Resort, İçmeler, 48740 Marmaris / Muğla",
+      "phone": "+90 530 743 64 97",
+      "whatsapp": "https://wa.me/905307436497",
+      "status": "active",
+      "hours": "09:00 - 22:00",
+      "notes": "Termal wellness konsepti mevcuttur."
+    },
+    {
+      "id": "adana-hilton",
+      "name": "Adana Hilton",
+      "hotel": "Adana HiltonSA",
+      "city": "Adana",
+      "address": "Sinanpaşa, Hacı Sabancı Blv. No:1, 01220 Yüreğir / Adana",
+      "phone": "+90 322 355 50 00",
+      "whatsapp": null,
+      "status": "active",
+      "hours": "09:00 - 22:00"
+    },
+    {
+      "id": "malatya-movenpick",
+      "name": "Malatya Mövenpick",
+      "hotel": "Mövenpick Hotel Malatya",
+      "city": "Malatya",
+      "address": "İnönü, İnönü Cd. No:174, 44090 Yeşilyurt / Malatya",
+      "phone": "+90 422 377 70 00",
+      "whatsapp": null,
+      "status": "active",
+      "hours": "09:00 - 22:00"
+    },
+    {
+      "id": "bolu-abant",
+      "name": "Abant",
+      "hotel": "Abant",
+      "city": "Bolu",
+      "address": "Yanık, Abant Yolu, 14030 Dereceören / Bolu Merkez / Bolu",
+      "phone": null,
+      "whatsapp": null,
+      "status": "renovation",
+      "notes": "Otel tadilattadır."
+    },
+    {
+      "id": "izmir-bomonti",
+      "name": "İzmir Bomonti",
+      "hotel": "Mahall Bomonti İzmir",
+      "city": "İzmir",
+      "address": "Halkapınar Mah. Şehitler Cd., 1558. Sk. No:2, 35170 Konak / İzmir",
+      "phone": null,
+      "whatsapp": null,
+      "status": "coming_soon",
+      "notes": "Çok Yakında Açılıyor - Hazırlıklar sürmektedir."
+    }
+  ],
+  "services": {
+    "massages": [
+      {
+        "name": "Antistress Masajı",
+        "duration": "60 dk",
+        "desc": "Bel, boyun ve sırt bölgelerindeki kas spazmlarını çözer, kan dolaşımını canlandırır."
+      },
+      {
+        "name": "Klasik İsveç Masajı",
+        "duration": "50 dk",
+        "desc": "Tüm vücuda uygulanan manipülasyonlarla dolaşımı uyarır, kas tonusunu düzenler."
+      },
+      {
+        "name": "Spor Masajı",
+        "duration": "45 dk",
+        "desc": "Derin doku manipülasyonları ve esnetmelerle mikro gerginlikleri çözer, hızlı toparlanma sağlar."
+      },
+      {
+        "name": "Derin Doku Masajı",
+        "duration": "45 dk",
+        "desc": "Tetik noktalara ve derin kas liflerine yüksek basınçla müdahale ederek sertlikleri açar."
+      },
+      {
+        "name": "Bali Masajı",
+        "duration": "50 dk",
+        "desc": "Doğal yağlar, akupresur ve esnetme hareketleriyle enerji akışını dengeler, derin gevşeme sağlar."
+      },
+      {
+        "name": "Mum Masajı",
+        "duration": "50 dk",
+        "desc": "Ilık soya/shea mumu dokunuşuyla cildi yoğun nemlendirir ve kasları ipeksi sıcaklıkla gevşetir."
+      },
+      {
+        "name": "Aromaterapi Masajı",
+        "duration": "50 dk",
+        "desc": "Şifalı aromatik uçucu yağlar eşliğinde dinlendirici ve ruhu tazeleyen masaj."
+      },
+      {
+        "name": "Medikal Masaj",
+        "duration": "50 dk",
+        "desc": "Özel medikal kremler eşliğinde kas ve eklem ağrılarını hedefleyen tedavi edici seans."
+      },
+      {
+        "name": "Sıcak Taş Masajı",
+        "duration": "60 dk",
+        "desc": "Isıtılmış volkanik bazalt taşlarının ısısıyla en derin kas gerginliklerini çözer."
+      },
+      {
+        "name": "Sultan Masajı (4 El)",
+        "duration": "50 dk",
+        "desc": "İki uzman terapistin aynı anda uyguladığı kusursuz senkronize terapi."
+      },
+      {
+        "name": "Ayak Masajı (Refleksoloji)",
+        "duration": "30 dk",
+        "desc": "Ayak tabanındaki refleks noktalarına uygulanan baskılarla tüm vücudu dengeler."
+      },
+      {
+        "name": "Selülit Masajı",
+        "duration": "50 dk",
+        "desc": "Sorunlu bölgelere uygulanan ritmik manipülasyonlarla ödem atımı ve sıkılaşma sağlar."
+      }
+    ],
+    "hammam": [
+      {
+        "name": "Geleneksel Kese & Köpük",
+        "duration": "45 dk",
+        "desc": "Göbek taşında ısınma, ipek kese ile ölü derilerden arınma ve organik zeytinyağlı köpük masajı."
+      },
+      {
+        "name": "Navitas Signature Hamam Ritüeli",
+        "duration": "60 dk",
+        "desc": "Kese ve köpüğe ek olarak mineral vücut peelingi ve besleyici bakım aşamaları."
+      },
+      {
+        "name": "Sultan Hamamı (4 El)",
+        "duration": "50 dk",
+        "desc": "İki hamam görevlisinin aynı anda senkronize uyguladığı lüks kese ve köpük ritüeli."
+      },
+      {
+        "name": "Focused Care Köpük / Kese",
+        "duration": "20-25 dk",
+        "desc": "Transit yolcular için hızlı göbek taşı ve kese/köpük bakımı."
+      }
+    ],
+    "skincare": [
+      {
+        "name": "Hydrafacial",
+        "desc": "Tek seansta derin gözenek temizliği, vakumlu siyah nokta tahliyesi, sıvı peeling ve antioksidan nem infüzyonu."
+      },
+      {
+        "name": "Kolajen Bakımı",
+        "desc": "Yüksek konsantrasyonlu kolajen ve peptitlerle sıkılaştırıcı anti-aging ritüeli."
+      },
+      {
+        "name": "Leke Bakımı",
+        "desc": "Güneş ve yaş alma kaynaklı ton eşitsizliklerini hedefleyen aydınlatıcı vitamin kürü."
+      },
+      {
+        "name": "Sırt Bakımı",
+        "desc": "Sırt bölgesine derin gözenek temizliği, peeling, buhar ve nemlendirici masaj."
+      },
+      {
+        "name": "Klasik Cilt Bakımı",
+        "desc": "Cildin doğal nem ve sebum dengesini geri kazandıran temel bakım."
+      },
+      {
+        "name": "Lazer Epilasyon",
+        "desc": "İleri teknoloji cihazlarla kişiye özel konforlu ve hijyenik kalıcı pürüzsüzlük."
+      }
+    ],
+    "fitness": [
+      {
+        "name": "Genel Üyelik",
+        "desc": "3 aylık, 6 aylık ve yıllık tam donanımlı salon üyeliği."
+      },
+      {
+        "name": "Personal Training (Özel Fitness)",
+        "desc": "Uzman eğitmenle kişiselleştirilmiş birebir antrenman programı."
+      },
+      {
+        "name": "Özel Pilates",
+        "desc": "Omurga sağlığı, duruş düzeltme ve derin kas aktivasyonu için birebir pilates."
+      }
+    ],
+    "pool": {
+      "name": "Kapalı Yüzme Havuzu",
+      "desc": "Yıl boyu ısıtmalı kapalı havuz. Hijyen standartları gereği bone zorunludur."
+    },
+    "vip_ritual": {
+      "name": "VIP Ritüeli",
+      "desc": "Tamamen kişiye/çifte özel süit. Kese-köpük, çift masajı, odaya özel sauna ve jakuzi, detoks ve taze meyve ikramları, Smart TV sinema keyfi."
+    },
+    "bridal_hammam": {
+      "name": "Gelin Hamamı Programı",
+      "hours": "09:00 - 14:00",
+      "capacity": "Maksimum 15 kişi",
+      "desc": "Kadın bölümü sauna, buhar ve hamamın özel kullanımı, geline özel kese-köpük, geleneksel şerbet ikramı, çerez ve mevsim meyveleri, havlu/peştamal temini."
+    }
+  },
+  "policies": {
+    "cancellation": "Randevudan 4 saat öncesine kadar değişiklik ve iptal ücretsizdir. Uçuş rötarlarında esneklik sağlanır.",
+    "arrival": "Randevu saatinden en az 10-15 dakika önce gelinmelidir.",
+    "dress_code": "Spa tarafından havlu, peştamal, bornoz ve terlik temin edilir. Havuz için mayo getirilmelidir; bone takmak zorunludur.",
+    "age_limit": "18 yaş altı misafirler yalnızca ebeveyn refakatiyle kabul edilir.",
+    "pregnancy": "İlk 3 ayda masaj önerilmez; sonraki aylarda hafif hamile masajı yapılabilir ancak sıcak ıslak alanlar ve sauna yasaktır.",
+    "pricing": "Fiyatlar kişi başıdır. Seçilen şubeye ve seans süresine göre değiştiği için WhatsApp ve telefonla anında iletilir."
+  }
+}

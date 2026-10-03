@@ -1299,6 +1299,33 @@ body {
   color: var(--text-secondary);
 }
 
+.kb-branch-selector-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.kb-branch-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.kb-branch-select {
+  padding: 7px 14px;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface-elevated);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  max-width: none;
+}
+
 .kb-quick-insert-bar {
   display: flex;
   align-items: center;
